@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on César Olea</title>
+    <link>http://www.cesarolea.com/posts/</link>
+    <description>Recent content in Posts on César Olea</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© Copyright César Olea 2020</copyright>
+    <lastBuildDate>Thu, 24 Sep 2020 11:58:00 -0700</lastBuildDate><atom:link href="http://www.cesarolea.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ClojureScript Setup Made Easier With Anvil</title>
+      <link>http://www.cesarolea.com/posts/clojurescript-setup-made-easier-with-anvil/</link>
+      <pubDate>Thu, 24 Sep 2020 11:58:00 -0700</pubDate>
+      
+      <guid>http://www.cesarolea.com/posts/clojurescript-setup-made-easier-with-anvil/</guid>
+      <description>Some time ago I wrote a series posts in the devz.mx blog on setting up a ClojureScript project from scratch. I did it for learning how to do it myself. There’s multiple leiningen templates that will set it up for you, but I always fell short when wanting to set up a more complex environment such as a browser connected REPL, code evaluation from your editor, setting up multiple ClojureScript libraries, and more.</description>
+    </item>
+    
+  </channel>
+</rss>
