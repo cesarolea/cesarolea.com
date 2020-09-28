@@ -4,7 +4,7 @@ date: 2020-09-24T11:58:00-07:00
 draft: false
 ---
 
-Some time ago [I wrote a series posts](https://blog.devz.mx/clojurescript-sin-atajos-fase-1/) in the devz.mx blog on setting up a ClojureScript project from scratch. I did it for learning how to do it myself. There’s multiple leiningen templates that will set it up for you, but I always fell short when wanting to set up a more complex environment such as a browser connected REPL, code evaluation from your editor, setting up multiple ClojureScript libraries, and more.
+Some time ago [I wrote a series posts](https://blog.devz.mx/clojurescript-sin-atajos-fase-1/) in the [devz.mx](https://devz.mx) blog on setting up a ClojureScript project from scratch. I did it for learning how to do it myself. There’s multiple leiningen templates that will set it up for you, but I always fell short when wanting to set up a more complex environment such as a browser connected REPL, code evaluation from your editor, setting up multiple ClojureScript libraries, and more.
 
 From the learning perspective, it was a success. I was able to learn the ins and outs of setting up a new ClojureScript project, and used it for my personal projects. Eventually I decided to wrap everything in a leiningen template and publish it for everyone else to use. Enter [anvil](https://github.com/cesarolea/anvil-lein-template).
 

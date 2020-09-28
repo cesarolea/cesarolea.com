@@ -17,5 +17,15 @@
       <description>Some time ago I wrote a series posts in the devz.mx blog on setting up a ClojureScript project from scratch. I did it for learning how to do it myself. There’s multiple leiningen templates that will set it up for you, but I always fell short when wanting to set up a more complex environment such as a browser connected REPL, code evaluation from your editor, setting up multiple ClojureScript libraries, and more.</description>
     </item>
     
+    <item>
+      <title>Efecto De Fuego Con ClojureScript</title>
+      <link>http://www.cesarolea.com/posts/efecto-de-fuego-con-clojurescript/</link>
+      <pubDate>Wed, 15 May 2019 19:08:01 -0700</pubDate>
+      
+      <guid>http://www.cesarolea.com/posts/efecto-de-fuego-con-clojurescript/</guid>
+      <description>This article was originally posted in the devz.mx blog.
+Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recientemente, y uno de los capítulos que más disfruté fue el dedicado a los ports de Doom a las diferentes consolas de la época. Está lleno de detalles técnicos e historias sobre las restricciones sobre las cuales tenían que trabajar los programadores de la época para llevar uno de los títulos más populares y emblemáticos de la PC a consolas &amp;ldquo;imposibles&amp;rdquo; como el SNES.</description>
+    </item>
+    
   </channel>
 </rss>

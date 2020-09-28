@@ -1,0 +1,8 @@
+#+HUGO_TYPE: page
+
+** Hi!
+
+My name is César Olea. I'm a Software Developer living in Hermosillo,
+México. If you want to know what I'm working on, the best place is my
+[[https://github.com/cesarolea][Github profile]]. You can also find my contact details in [[/resume.pdf][my resume]], or
+check out my [[https://www.linkedin.com/in/cesarolea][Linkedin profile]].

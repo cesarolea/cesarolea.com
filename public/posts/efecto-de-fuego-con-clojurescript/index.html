@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Efecto De Fuego Con ClojureScript - César Olea</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta itemprop="name" content="Efecto De Fuego Con ClojureScript">
+<meta itemprop="description" content="This article was originally posted in the devz.mx blog.
+Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recientemente, y uno de los capítulos que más disfruté fue el dedicado a los ports de Doom a las diferentes consolas de la época. Está lleno de detalles técnicos e historias sobre las restricciones sobre las cuales tenían que trabajar los programadores de la época para llevar uno de los títulos más populares y emblemáticos de la PC a consolas &ldquo;imposibles&rdquo; como el SNES.">
+<meta itemprop="datePublished" content="2019-05-15T19:08:01-07:00" />
+<meta itemprop="dateModified" content="2019-05-15T19:08:01-07:00" />
+<meta itemprop="wordCount" content="1588">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta property="og:title" content="Efecto De Fuego Con ClojureScript" />
+<meta property="og:description" content="This article was originally posted in the devz.mx blog.
+Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recientemente, y uno de los capítulos que más disfruté fue el dedicado a los ports de Doom a las diferentes consolas de la época. Está lleno de detalles técnicos e historias sobre las restricciones sobre las cuales tenían que trabajar los programadores de la época para llevar uno de los títulos más populares y emblemáticos de la PC a consolas &ldquo;imposibles&rdquo; como el SNES." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.cesarolea.com/posts/efecto-de-fuego-con-clojurescript/" />
+<meta property="article:published_time" content="2019-05-15T19:08:01-07:00" />
+<meta property="article:modified_time" content="2019-05-15T19:08:01-07:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Efecto De Fuego Con ClojureScript"/>
+<meta name="twitter:description" content="This article was originally posted in the devz.mx blog.
+Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recientemente, y uno de los capítulos que más disfruté fue el dedicado a los ports de Doom a las diferentes consolas de la época. Está lleno de detalles técnicos e historias sobre las restricciones sobre las cuales tenían que trabajar los programadores de la época para llevar uno de los títulos más populares y emblemáticos de la PC a consolas &ldquo;imposibles&rdquo; como el SNES."/>
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" media="screen" href="http://www.cesarolea.com/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://www.cesarolea.com/css/main.css" />
+
+        <link id="dark-scheme" rel="stylesheet" type="text/css" href="http://www.cesarolea.com/css/dark.css" />
+
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+		<script src="http://www.cesarolea.com/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper">
+		<div class="header">
+	
+	<h1 class="site-title"><a href="http://www.cesarolea.com/">César Olea</a></h1>
+	<div class="site-description"><p>Software Developer | CTO of <a href="https://loanpro.io">LoanPro</a></p><nav class="nav social">
+			<ul class="flat"><li><a href="https://github.com/cesarolea" title="Github"><i data-feather="github"></i></a></li><li><a href="https://linkedin.com/in/cesarolea" title="Linkedin"><i data-feather="linkedin"></i></a></li><li><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></li></ul>
+		</nav><span class="scheme-toggle"><a href="#" id="scheme-toggle"></a></div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">Blog</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="/rockofonia">Rockofonia</a>
+			</li>
+			
+			<li>
+				<a href="/resume.pdf">Resume</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post">
+			<div class="post-header">
+				
+					<div class="meta">
+						<div class="date">
+							<span class="day">15</span>
+							<span class="rest">May 2019</span>
+						</div>
+					</div>
+				
+				<div class="matter">
+					<h1 class="title">Efecto De Fuego Con ClojureScript</h1>
+				</div>
+			</div>
+					
+			<div class="markdown">
+				<p><em>This article was <a href="https://devz.mx/efecto-de-fuego-con-clojurescript/">originally posted in the devz.mx blog</a>.</em></p>
+<p>Terminé de leer el libro <em>Game Engine Black Book: Doom</em> de <a href="http://fabiensanglard.net/gebbdoom/index.html">Fabien Sanglard</a> recientemente, y uno de los capítulos que más disfruté fue el dedicado a los <em>ports</em> de Doom a las diferentes consolas de la época. Está lleno de detalles técnicos e historias sobre las restricciones sobre las cuales tenían que trabajar los programadores de la época para llevar uno de los títulos más populares y emblemáticos de la PC a consolas &ldquo;imposibles&rdquo; como el SNES.</p>
+<p>Sin duda alguna uno de los ports más populares fue el de <em>PlayStation</em>. Igual que otras consolas de la época, no contaba con suficiente <em>oomph</em> para utilizar los mapas originales, así que usó los mapas modificados para <em>Jaguar</em> que reducen la geometría y el uso de texturas, se redujo el tamaño de las texturas y los frames de animación de algunos de los enemigos. Incluso se dejo al <em>Archvile</em> completamente fuera ya que cuenta con demasiados frames de animación y por lo tanto demasiadas texturas como para caber junto con todo el resto de los datos en 3 MB de memoria RAM.</p>
+<p>Pero no todo fueron malas noticias. De hecho el <em>port</em> mejoró algunas cosas, entre ellas los efectos de sonido, la música fue mejorada a 44KHz, 16-bit stereo, o sea calidad de CD (obviamente, considerando que CD era uno de los puntos principales de <em>PlayStation</em>). Y lo más significativo fue el uso de <em>alpha blending</em> en sectores todas las texturas de ciertos sectores y puertas, agregando un efecto de color a aquellas puertas que se abren con una tarjeta roja, por ejemplo.</p>
+<p>Pero una de las cosas que más llamó mi atención fue los efectos de fuego en las áreas abiertas de ciertos niveles, y en el intro.</p>
+<p><img src="/images/doom_fire.jpg" alt="Doom Fire"></p>
+<p>La razón por la que me llamó mi atención es porque a pesar de tener las limitantes del <em>hardware</em>, al parecer a los programadores les quedaron algunos ciclos del CPU y no dejaron pasar la oportunidad de hacer algo atractivo con eso. Bien por ellos.</p>
+<p>Afortunadamente el autor del libro <a href="http://fabiensanglard.net/doom_fire_psx/index.html">cubre precisamente este efecto</a> en un artículo en su sitio web. O pueden quedarse y hacer el suyo.</p>
+<h2 id="como-hacemos-fuego">¿Como hacemos fuego?</h2>
+<p>Este es un efecto clásico. Se basa en dos conceptos muy simples:</p>
+<ol>
+<li>Una paleta de colores para asemejar los colores que encontramos en un fuego real.</li>
+<li>Propagar el fuego de abajo hacia arriba, calculando el &ldquo;calor&rdquo; de pixeles superiores basados en el calor de pixeles actuales.</li>
+</ol>
+<h2 id="paleta-de-colores">Paleta de colores</h2>
+<p>La paleta de colores consta de colores obscuros, pasando por tonos rojos, amarillos hasta llegar al completamente blanco:</p>
+<div class="wrapper" style="border: 3px solid #6272a4; border-radius: 5px; background-color: #fff4e6; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;">
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(  7,   7,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb( 31,   7,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb( 47,  15,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb( 71,  15,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb( 87,  23,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(103,  31,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(119,  31,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(143,  39,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(159,  47,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(175,  63,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(191,  71,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(199,  71,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(223,  79,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(223,  87,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(223,  87,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(215,  95,   7);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(215, 103,  15);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(207, 111,  15);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(207, 119,  15);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(207, 127,  15);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(207, 135,  23);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(199, 135,  23);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(199, 143,  23);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(199, 151,  31);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(191, 159,  31);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(191, 159,  31);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(191, 167,  39);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(191, 167,  39);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(191, 175,  47);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(183, 175,  47);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(183, 183,  47);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(183, 183,  55);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(207, 207, 111);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(223, 223, 159);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(239, 239, 199);"></div>
+    <div style="border: 1px solid #ffb86c;border-radius: 0px;padding: 0.5em;background-color: rgb(255, 255, 255);"></div>
+</div>
+
+<p>Este último color blanco va a servir de &ldquo;combustible&rdquo;. Y justo como un fuego real, los píxeles superiores van a recibir &ldquo;calor&rdquo; de las lineas inferiores. Entonces lo primero que hacemos es organizar nuestra paleta de colores:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">[
+ [  7   7   7] <span style="color:#008000">;; 0</span>
+ [ 31   7   7] <span style="color:#008000">;; 1</span>
+ [ 47  15   7] <span style="color:#008000">;; 2</span>
+ [ 71  15   7] <span style="color:#008000">;; 3</span>
+ [ 87  23   7] <span style="color:#008000">;; 4</span>
+ [103  31   7] <span style="color:#008000">;; 5</span>
+ [119  31   7] <span style="color:#008000">;; 6</span>
+ [143  39   7] <span style="color:#008000">;; 7</span>
+ [159  47   7] <span style="color:#008000">;; 8</span>
+ [175  63   7] <span style="color:#008000">;; 9</span>
+ [191  71   7] <span style="color:#008000">;; 10</span>
+ [199  71   7] <span style="color:#008000">;; 11</span>
+ [223  79   7] <span style="color:#008000">;; 12</span>
+ [223  87   7] <span style="color:#008000">;; 13</span>
+ [223  87   7] <span style="color:#008000">;; 14</span>
+ [215  95   7] <span style="color:#008000">;; 15</span>
+ [215 103  15] <span style="color:#008000">;; 16</span>
+ [207 111  15] <span style="color:#008000">;; 17</span>
+ [207 119  15] <span style="color:#008000">;; 18</span>
+ [207 127  15] <span style="color:#008000">;; 19</span>
+ [207 135  23] <span style="color:#008000">;; 20</span>
+ [199 135  23] <span style="color:#008000">;; 21</span>
+ [199 143  23] <span style="color:#008000">;; 22</span>
+ [199 151  31] <span style="color:#008000">;; 23</span>
+ [191 159  31] <span style="color:#008000">;; 24</span>
+ [191 159  31] <span style="color:#008000">;; 25</span>
+ [191 167  39] <span style="color:#008000">;; 26</span>
+ [191 167  39] <span style="color:#008000">;; 27</span>
+ [191 175  47] <span style="color:#008000">;; 28</span>
+ [183 175  47] <span style="color:#008000">;; 29</span>
+ [183 183  47] <span style="color:#008000">;; 30</span>
+ [183 183  55] <span style="color:#008000">;; 31</span>
+ [207 207 111] <span style="color:#008000">;; 32</span>
+ [223 223 159] <span style="color:#008000">;; 33</span>
+ [239 239 199] <span style="color:#008000">;; 34</span>
+ [255 255 255] <span style="color:#008000">;; 35</span>
+]
+</code></pre></div><p>Es un vector de vectores. Cada vector representa un color en RGB, y la posición en el vector que los contiene va a servir de índice, que va de más &ldquo;frio&rdquo; (0) a más &ldquo;caliente&rdquo; (35).</p>
+<h2 id="encendiendo-el-fuego">Encendiendo el fuego</h2>
+<p>Para encender el fuego necesitamos combustible, y el estado del fuego lo podemos representar como un arreglo de píxeles. El número de píxeles es igual al número total de píxeles en nuestra ventana. Por ejemplo si la ventana es de <code>160x84</code> entonces el número total de píxeles es de 13,440. A este arreglo de píxeles le estoy llamando <code>fire-pixels</code>.</p>
+<p>Dado a que el arreglo de píxeles es lineal, cada 160 píxeles representa un renglón de nuestro fuego. Entonces necesitamos llenar de 0 todas las posiciones, excepto las que representen el último renglón:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(-&gt; state
+    (update-in [<span style="color:#a31515">:fire-pixels</span>]
+               #(reduce (<span style="color:#00f">fn </span>[px i]
+                          (conj px (<span style="color:#00f">if </span>(&lt; i (- pixel-count pixel-row)) 0 35)))
+                        [] (range pixel-count))))
+</code></pre></div><p><code>state</code> es un mapa que contiene el estado de nuestro programa. El <code>reduce</code> anterior es un ciclo que va de <code>0 &lt;= i &lt; pixel-count</code> e inicializa nuestro fuego.</p>
+<h2 id="propagando-el-fuego">Propagando el fuego</h2>
+<p>Esta es la parte interesante, y en realidad es bastante sencillo. Por cada <code>tick</code>, vamos a recalcular todos los píxeles en el arreglo <code>fire-pixels</code>. Utilizamos dos funciones para lograrlo:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn- </span>do-fire
+  [{<span style="color:#a31515">:keys</span> [fire-pixels pixel-count] <span style="color:#a31515">:as</span> state}]
+  (-&gt; state
+      (update-in [<span style="color:#a31515">:fire-pixels</span>]
+                 #(<span style="color:#00f">loop </span>[i 0 px fire-pixels]
+                    (<span style="color:#00f">if </span>(&lt; i pixel-count)
+                      (<span style="color:#00f">let </span>[[random-index pixel] (spread-fire-random state i)
+                            random-index (Math/abs (- i random-index))]
+                        (recur (inc i) (assoc px random-index pixel)))
+                      px)))))
+</code></pre></div><p>Es muy similar al <code>reduce</code> anterior. Simplemente es un ciclo que va de <code>0 &lt;= i &lt; pixel-count</code> y en base al valor actual de cada píxel, calcula un nuevo valor. Después asigna ese nuevo valor a una posición aleatoria en el arreglo.</p>
+<p>Esto logra dos objetivos:</p>
+<ol>
+<li>Simular movimiento en el fuego, gracias a que el arreglo es constantemente recalculado.</li>
+<li>Propagar el &ldquo;calor&rdquo; del fuego de abajo hacia arriba.</li>
+</ol>
+<p>Finalmente la función <code>spread-fire-random</code> que es donde se hace el cálculo del valor del píxel de acuerdo a su valor actual:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn- </span>spread-fire-random
+  [{<span style="color:#a31515">:keys</span> [fire-pixels pixel-row] <span style="color:#a31515">:as</span> state} src]
+  (<span style="color:#00f">let </span>[pixel (get fire-pixels (+ src pixel-row))
+        random-index (bit-and (Math/round (* (Math/random) 3.0)) 3)]
+    (cond
+      (= pixel 0) [random-index 0]
+      (nil? pixel) [random-index (get fire-pixels src)]
+      <span style="color:#a31515">:else</span> [(bit-and random-index 1) (- pixel (bit-and random-index 1))])))
+</code></pre></div><p>Esta funcion realiza lo siguiente:</p>
+<ol>
+<li>Para un píxel <code>n</code> obtiene el valor actual del píxel que se encuentra debajo de el <code>(get fire-pixels (+ src pixel-row))</code> recordando que la esquina superior izquierda representa las coordenadas 0,0. A este valor le llamamos <code>pixel</code>.</li>
+<li>Calcula un índice aleatorio.</li>
+<li>Si <code>pixel = 0</code> entonces regresa la tupla <code>[random-index 0]</code>. El segundo elemento representa el nivel de calor del nuevo píxel. En este caso como el píxel debajo tiene nivel 0, eso quiere decir que ya llegó a su nivel mínimo y por lo tanto debe ser 0.</li>
+<li>Si <code>pixel = nil</code> quiere decir que estamos revisando más allá de los límites de la ventana, por lo que regresamos el valor del píxel actual <code>[random-index (get fire-pixels src)]</code></li>
+<li>Si píxel no es 0 y tampoco es <code>nil</code>, entonces el nivel de calor es la diferencia entre el nivel actual y un valor aleatorio: <code>[(bit-and random-index 1) (- pixel (bit-and random-index 1))]</code>.</li>
+</ol>
+<p>Cuando <code>do-fire</code> recibe la tupla, los separa en <code>random-index</code> y <code>pixel</code> provenientes de la posición 0 y 1 respectivamente. Y de ahí simplemente modifica el arreglo <code>fire-pixels</code> en la posición <code>random-index</code> y le asigna el valor de <code>pixel</code>.</p>
+<p>Lo único que queda es pintar la pantalla.</p>
+<h2 id="pintando-fuego">Pintando fuego</h2>
+<p>Esto no tiene nada que ver con la simulación, pero igual lo incluyo por si le sirve de referencia a alguien.</p>
+<p>La función <code>draw-pixels</code> recibe el arreglo <code>fire-pixels</code> y la paleta de colores, y modifica los píxeles en pantalla.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn- </span>draw-pixels
+  [{<span style="color:#a31515">:keys</span> [fire-pixels pallete] <span style="color:#a31515">:as</span> state}]
+  (<span style="color:#00f">let </span>[px (q/pixels)  <span style="color:#008000">;; screen pixels</span>
+        px-count (* 4 (* (* (q/display-density) (q/width))
+                         (* (q/display-density) (q/height))))
+        px-row (* 4 (* (q/display-density) (q/width)))
+        [width height] screen-dimension]
+    (<span style="color:#00f">loop </span>[i 0]
+      (when (&lt; i px-count)
+        (<span style="color:#00f">let </span>[pixel-value (get fire-pixels (/ i 4))
+              [r g b] (get pallete pixel-value)]
+          (aset px (+ i 0) r)
+          (aset px (+ i 1) g)
+          (aset px (+ i 2) b)
+          (aset px (+ i 3) 255))
+        (recur (+ i 4))))
+    (q/update-pixels)))
+</code></pre></div><p><code>(q/pixels)</code> regresa los píxeles de la pantalla. La librería que estamos utilizando (Quil) representa los píxeles como un conjunto de 4 números enteros representando el componente rojo, verde, azul y el nivel de alpha. Entonces por cada <code>fire-pixel</code> vamos a tener 4 elementos en <code>px</code>.</p>
+<p>Además de eso, dependiendo de la densidad de la pantalla va a ser el número de píxeles que se tengan que pintar. Para una pantalla de doble densidad (de las llamadas &ldquo;retina&rdquo; o &ldquo;Hi-DPI&rdquo;) <code>(q/display-density)</code> regresa 2, entonces en efecto estamos duplicando el número de píxeles por pantalla.</p>
+<p>Finalmente obtenemos el valor por píxel y el valor correspondiente en RGB de la paleta de colores, y aplicamos estos componentes al arreglo <code>px</code> que contiene los píxeles de pantalla, avanzando el ciclo de 4 en 4.</p>
+<h2 id="resultado">Resultado</h2>
+<div id="fire" style="padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block;">
+    <script type="text/javascript" src="/doom-fire/prod-main.js">Se requiere JavaScript</script>
+</div>
+
+<p>Pueden mantener presionado shift para apagar el fuego temporalmente. Esta es mi parte favorita, ya que para simular que se apaga el fuego, literalmente tienes que eliminar el &ldquo;combustible&rdquo; poniendo el valor de la última fila en 0:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn </span>toggle-fire
+  [{<span style="color:#a31515">:keys</span> [fire-pixels pressed-keys pixel-row pixel-count] <span style="color:#a31515">:as</span> state}]
+  (update-in state [<span style="color:#a31515">:fire-pixels</span>]
+             (<span style="color:#00f">fn </span>[fp]
+               (reduce (<span style="color:#00f">fn </span>[px i] (conj px (<span style="color:#00f">if </span>(&lt; i (- pixel-count pixel-row))
+                                             (get fp i)
+                                             (<span style="color:#00f">if </span>(contains? pressed-keys <span style="color:#a31515">&#34;space&#34;</span>) 0 35))))
+                       [] (range pixel-count)))))
+</code></pre></div><h2 id="referencias">Referencias</h2>
+<ul>
+<li><a href="http://fabiensanglard.net/doom_fire_psx/index.html">How Doom fire was done</a></li>
+</ul>
+<h2 id="vínculos">Vínculos</h2>
+<ul>
+<li><a href="https://github.com/cesarolea/cljs-doom-fire">Implementación completa en Github</a></li>
+</ul>
+
+			</div>
+
+			<div class="tags">
+				
+					
+				
+			</div></div>
+	</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright César Olea 2020 </div>
+	</nav>
+</div><script>feather.replace()</script>
+</body>
+</html>
