@@ -143,66 +143,66 @@ Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recien
 </div>
 
 <p>Este último color blanco va a servir de &ldquo;combustible&rdquo;. Y justo como un fuego real, los píxeles superiores van a recibir &ldquo;calor&rdquo; de las lineas inferiores. Entonces lo primero que hacemos es organizar nuestra paleta de colores:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">[
- [  7   7   7] <span style="color:#008000">;; 0</span>
- [ 31   7   7] <span style="color:#008000">;; 1</span>
- [ 47  15   7] <span style="color:#008000">;; 2</span>
- [ 71  15   7] <span style="color:#008000">;; 3</span>
- [ 87  23   7] <span style="color:#008000">;; 4</span>
- [103  31   7] <span style="color:#008000">;; 5</span>
- [119  31   7] <span style="color:#008000">;; 6</span>
- [143  39   7] <span style="color:#008000">;; 7</span>
- [159  47   7] <span style="color:#008000">;; 8</span>
- [175  63   7] <span style="color:#008000">;; 9</span>
- [191  71   7] <span style="color:#008000">;; 10</span>
- [199  71   7] <span style="color:#008000">;; 11</span>
- [223  79   7] <span style="color:#008000">;; 12</span>
- [223  87   7] <span style="color:#008000">;; 13</span>
- [223  87   7] <span style="color:#008000">;; 14</span>
- [215  95   7] <span style="color:#008000">;; 15</span>
- [215 103  15] <span style="color:#008000">;; 16</span>
- [207 111  15] <span style="color:#008000">;; 17</span>
- [207 119  15] <span style="color:#008000">;; 18</span>
- [207 127  15] <span style="color:#008000">;; 19</span>
- [207 135  23] <span style="color:#008000">;; 20</span>
- [199 135  23] <span style="color:#008000">;; 21</span>
- [199 143  23] <span style="color:#008000">;; 22</span>
- [199 151  31] <span style="color:#008000">;; 23</span>
- [191 159  31] <span style="color:#008000">;; 24</span>
- [191 159  31] <span style="color:#008000">;; 25</span>
- [191 167  39] <span style="color:#008000">;; 26</span>
- [191 167  39] <span style="color:#008000">;; 27</span>
- [191 175  47] <span style="color:#008000">;; 28</span>
- [183 175  47] <span style="color:#008000">;; 29</span>
- [183 183  47] <span style="color:#008000">;; 30</span>
- [183 183  55] <span style="color:#008000">;; 31</span>
- [207 207 111] <span style="color:#008000">;; 32</span>
- [223 223 159] <span style="color:#008000">;; 33</span>
- [239 239 199] <span style="color:#008000">;; 34</span>
- [255 255 255] <span style="color:#008000">;; 35</span>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">[
+ [  <span style="color:#666">7</span>   <span style="color:#666">7</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 0</span>
+ [ <span style="color:#666">31</span>   <span style="color:#666">7</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 1</span>
+ [ <span style="color:#666">47</span>  <span style="color:#666">15</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 2</span>
+ [ <span style="color:#666">71</span>  <span style="color:#666">15</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 3</span>
+ [ <span style="color:#666">87</span>  <span style="color:#666">23</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 4</span>
+ [<span style="color:#666">103</span>  <span style="color:#666">31</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 5</span>
+ [<span style="color:#666">119</span>  <span style="color:#666">31</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 6</span>
+ [<span style="color:#666">143</span>  <span style="color:#666">39</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 7</span>
+ [<span style="color:#666">159</span>  <span style="color:#666">47</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 8</span>
+ [<span style="color:#666">175</span>  <span style="color:#666">63</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 9</span>
+ [<span style="color:#666">191</span>  <span style="color:#666">71</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 10</span>
+ [<span style="color:#666">199</span>  <span style="color:#666">71</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 11</span>
+ [<span style="color:#666">223</span>  <span style="color:#666">79</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 12</span>
+ [<span style="color:#666">223</span>  <span style="color:#666">87</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 13</span>
+ [<span style="color:#666">223</span>  <span style="color:#666">87</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 14</span>
+ [<span style="color:#666">215</span>  <span style="color:#666">95</span>   <span style="color:#666">7</span>] <span style="color:#080;font-style:italic">;; 15</span>
+ [<span style="color:#666">215</span> <span style="color:#666">103</span>  <span style="color:#666">15</span>] <span style="color:#080;font-style:italic">;; 16</span>
+ [<span style="color:#666">207</span> <span style="color:#666">111</span>  <span style="color:#666">15</span>] <span style="color:#080;font-style:italic">;; 17</span>
+ [<span style="color:#666">207</span> <span style="color:#666">119</span>  <span style="color:#666">15</span>] <span style="color:#080;font-style:italic">;; 18</span>
+ [<span style="color:#666">207</span> <span style="color:#666">127</span>  <span style="color:#666">15</span>] <span style="color:#080;font-style:italic">;; 19</span>
+ [<span style="color:#666">207</span> <span style="color:#666">135</span>  <span style="color:#666">23</span>] <span style="color:#080;font-style:italic">;; 20</span>
+ [<span style="color:#666">199</span> <span style="color:#666">135</span>  <span style="color:#666">23</span>] <span style="color:#080;font-style:italic">;; 21</span>
+ [<span style="color:#666">199</span> <span style="color:#666">143</span>  <span style="color:#666">23</span>] <span style="color:#080;font-style:italic">;; 22</span>
+ [<span style="color:#666">199</span> <span style="color:#666">151</span>  <span style="color:#666">31</span>] <span style="color:#080;font-style:italic">;; 23</span>
+ [<span style="color:#666">191</span> <span style="color:#666">159</span>  <span style="color:#666">31</span>] <span style="color:#080;font-style:italic">;; 24</span>
+ [<span style="color:#666">191</span> <span style="color:#666">159</span>  <span style="color:#666">31</span>] <span style="color:#080;font-style:italic">;; 25</span>
+ [<span style="color:#666">191</span> <span style="color:#666">167</span>  <span style="color:#666">39</span>] <span style="color:#080;font-style:italic">;; 26</span>
+ [<span style="color:#666">191</span> <span style="color:#666">167</span>  <span style="color:#666">39</span>] <span style="color:#080;font-style:italic">;; 27</span>
+ [<span style="color:#666">191</span> <span style="color:#666">175</span>  <span style="color:#666">47</span>] <span style="color:#080;font-style:italic">;; 28</span>
+ [<span style="color:#666">183</span> <span style="color:#666">175</span>  <span style="color:#666">47</span>] <span style="color:#080;font-style:italic">;; 29</span>
+ [<span style="color:#666">183</span> <span style="color:#666">183</span>  <span style="color:#666">47</span>] <span style="color:#080;font-style:italic">;; 30</span>
+ [<span style="color:#666">183</span> <span style="color:#666">183</span>  <span style="color:#666">55</span>] <span style="color:#080;font-style:italic">;; 31</span>
+ [<span style="color:#666">207</span> <span style="color:#666">207</span> <span style="color:#666">111</span>] <span style="color:#080;font-style:italic">;; 32</span>
+ [<span style="color:#666">223</span> <span style="color:#666">223</span> <span style="color:#666">159</span>] <span style="color:#080;font-style:italic">;; 33</span>
+ [<span style="color:#666">239</span> <span style="color:#666">239</span> <span style="color:#666">199</span>] <span style="color:#080;font-style:italic">;; 34</span>
+ [<span style="color:#666">255</span> <span style="color:#666">255</span> <span style="color:#666">255</span>] <span style="color:#080;font-style:italic">;; 35</span>
 ]
 </code></pre></div><p>Es un vector de vectores. Cada vector representa un color en RGB, y la posición en el vector que los contiene va a servir de índice, que va de más &ldquo;frio&rdquo; (0) a más &ldquo;caliente&rdquo; (35).</p>
 <h2 id="encendiendo-el-fuego">Encendiendo el fuego</h2>
 <p>Para encender el fuego necesitamos combustible, y el estado del fuego lo podemos representar como un arreglo de píxeles. El número de píxeles es igual al número total de píxeles en nuestra ventana. Por ejemplo si la ventana es de <code>160x84</code> entonces el número total de píxeles es de 13,440. A este arreglo de píxeles le estoy llamando <code>fire-pixels</code>.</p>
 <p>Dado a que el arreglo de píxeles es lineal, cada 160 píxeles representa un renglón de nuestro fuego. Entonces necesitamos llenar de 0 todas las posiciones, excepto las que representen el último renglón:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(-&gt; state
-    (update-in [<span style="color:#a31515">:fire-pixels</span>]
-               #(reduce (<span style="color:#00f">fn </span>[px i]
-                          (conj px (<span style="color:#00f">if </span>(&lt; i (- pixel-count pixel-row)) 0 35)))
-                        [] (range pixel-count))))
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a2f">-&gt; </span><span style="color:#b8860b">state</span>
+    (<span style="color:#00a000">update-in</span> [<span style="color:#b8860b">:fire-pixels</span>]
+               <span style="color:#666">#</span>(<span style="color:#a2f">reduce </span>(<span style="color:#a2f;font-weight:bold">fn </span>[<span style="color:#b8860b">px</span> <span style="color:#b8860b">i</span>]
+                          (<span style="color:#a2f">conj </span><span style="color:#b8860b">px</span> (<span style="color:#a2f;font-weight:bold">if </span>(<span style="color:#a2f">&lt; </span><span style="color:#b8860b">i</span> (<span style="color:#a2f">- </span><span style="color:#b8860b">pixel-count</span> <span style="color:#b8860b">pixel-row</span>)) <span style="color:#666">0</span> <span style="color:#666">35</span>)))
+                        [] (<span style="color:#a2f">range </span><span style="color:#b8860b">pixel-count</span>))))
 </code></pre></div><p><code>state</code> es un mapa que contiene el estado de nuestro programa. El <code>reduce</code> anterior es un ciclo que va de <code>0 &lt;= i &lt; pixel-count</code> e inicializa nuestro fuego.</p>
 <h2 id="propagando-el-fuego">Propagando el fuego</h2>
 <p>Esta es la parte interesante, y en realidad es bastante sencillo. Por cada <code>tick</code>, vamos a recalcular todos los píxeles en el arreglo <code>fire-pixels</code>. Utilizamos dos funciones para lograrlo:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn- </span>do-fire
-  [{<span style="color:#a31515">:keys</span> [fire-pixels pixel-count] <span style="color:#a31515">:as</span> state}]
-  (-&gt; state
-      (update-in [<span style="color:#a31515">:fire-pixels</span>]
-                 #(<span style="color:#00f">loop </span>[i 0 px fire-pixels]
-                    (<span style="color:#00f">if </span>(&lt; i pixel-count)
-                      (<span style="color:#00f">let </span>[[random-index pixel] (spread-fire-random state i)
-                            random-index (Math/abs (- i random-index))]
-                        (recur (inc i) (assoc px random-index pixel)))
-                      px)))))
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a2f;font-weight:bold">defn- </span><span style="color:#b8860b">do-fire</span>
+  [{<span style="color:#b8860b">:keys</span> [<span style="color:#b8860b">fire-pixels</span> <span style="color:#b8860b">pixel-count</span>] <span style="color:#b8860b">:as</span> <span style="color:#b8860b">state</span>}]
+  (<span style="color:#a2f">-&gt; </span><span style="color:#b8860b">state</span>
+      (<span style="color:#00a000">update-in</span> [<span style="color:#b8860b">:fire-pixels</span>]
+                 <span style="color:#666">#</span>(<span style="color:#a2f;font-weight:bold">loop </span>[<span style="color:#b8860b">i</span> <span style="color:#666">0</span> <span style="color:#b8860b">px</span> <span style="color:#b8860b">fire-pixels</span>]
+                    (<span style="color:#a2f;font-weight:bold">if </span>(<span style="color:#a2f">&lt; </span><span style="color:#b8860b">i</span> <span style="color:#b8860b">pixel-count</span>)
+                      (<span style="color:#a2f;font-weight:bold">let </span>[[<span style="color:#b8860b">random-index</span> <span style="color:#b8860b">pixel</span>] (<span style="color:#00a000">spread-fire-random</span> <span style="color:#b8860b">state</span> <span style="color:#b8860b">i</span>)
+                            <span style="color:#b8860b">random-index</span> (<span style="color:#00a000">Math/abs</span> (<span style="color:#a2f">- </span><span style="color:#b8860b">i</span> <span style="color:#b8860b">random-index</span>))]
+                        (<span style="color:#00a000">recur</span> (<span style="color:#a2f">inc </span><span style="color:#b8860b">i</span>) (<span style="color:#a2f">assoc </span><span style="color:#b8860b">px</span> <span style="color:#b8860b">random-index</span> <span style="color:#b8860b">pixel</span>)))
+                      <span style="color:#b8860b">px</span>)))))
 </code></pre></div><p>Es muy similar al <code>reduce</code> anterior. Simplemente es un ciclo que va de <code>0 &lt;= i &lt; pixel-count</code> y en base al valor actual de cada píxel, calcula un nuevo valor. Después asigna ese nuevo valor a una posición aleatoria en el arreglo.</p>
 <p>Esto logra dos objetivos:</p>
 <ol>
@@ -210,14 +210,14 @@ Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recien
 <li>Propagar el &ldquo;calor&rdquo; del fuego de abajo hacia arriba.</li>
 </ol>
 <p>Finalmente la función <code>spread-fire-random</code> que es donde se hace el cálculo del valor del píxel de acuerdo a su valor actual:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn- </span>spread-fire-random
-  [{<span style="color:#a31515">:keys</span> [fire-pixels pixel-row] <span style="color:#a31515">:as</span> state} src]
-  (<span style="color:#00f">let </span>[pixel (get fire-pixels (+ src pixel-row))
-        random-index (bit-and (Math/round (* (Math/random) 3.0)) 3)]
-    (cond
-      (= pixel 0) [random-index 0]
-      (nil? pixel) [random-index (get fire-pixels src)]
-      <span style="color:#a31515">:else</span> [(bit-and random-index 1) (- pixel (bit-and random-index 1))])))
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a2f;font-weight:bold">defn- </span><span style="color:#b8860b">spread-fire-random</span>
+  [{<span style="color:#b8860b">:keys</span> [<span style="color:#b8860b">fire-pixels</span> <span style="color:#b8860b">pixel-row</span>] <span style="color:#b8860b">:as</span> <span style="color:#b8860b">state</span>} <span style="color:#b8860b">src</span>]
+  (<span style="color:#a2f;font-weight:bold">let </span>[<span style="color:#b8860b">pixel</span> (<span style="color:#a2f">get </span><span style="color:#b8860b">fire-pixels</span> (<span style="color:#a2f">+ </span><span style="color:#b8860b">src</span> <span style="color:#b8860b">pixel-row</span>))
+        <span style="color:#b8860b">random-index</span> (<span style="color:#a2f">bit-and </span>(<span style="color:#00a000">Math/round</span> (<span style="color:#a2f">* </span>(<span style="color:#00a000">Math/random</span>) <span style="color:#666">3.0</span>)) <span style="color:#666">3</span>)]
+    (<span style="color:#00a000">cond</span>
+      (<span style="color:#a2f">= </span><span style="color:#b8860b">pixel</span> <span style="color:#666">0</span>) [<span style="color:#b8860b">random-index</span> <span style="color:#666">0</span>]
+      (<span style="color:#a2f">nil? </span><span style="color:#b8860b">pixel</span>) [<span style="color:#b8860b">random-index</span> (<span style="color:#a2f">get </span><span style="color:#b8860b">fire-pixels</span> <span style="color:#b8860b">src</span>)]
+      <span style="color:#b8860b">:else</span> [(<span style="color:#a2f">bit-and </span><span style="color:#b8860b">random-index</span> <span style="color:#666">1</span>) (<span style="color:#a2f">- </span><span style="color:#b8860b">pixel</span> (<span style="color:#a2f">bit-and </span><span style="color:#b8860b">random-index</span> <span style="color:#666">1</span>))])))
 </code></pre></div><p>Esta funcion realiza lo siguiente:</p>
 <ol>
 <li>Para un píxel <code>n</code> obtiene el valor actual del píxel que se encuentra debajo de el <code>(get fire-pixels (+ src pixel-row))</code> recordando que la esquina superior izquierda representa las coordenadas 0,0. A este valor le llamamos <code>pixel</code>.</li>
@@ -231,23 +231,23 @@ Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recien
 <h2 id="pintando-fuego">Pintando fuego</h2>
 <p>Esto no tiene nada que ver con la simulación, pero igual lo incluyo por si le sirve de referencia a alguien.</p>
 <p>La función <code>draw-pixels</code> recibe el arreglo <code>fire-pixels</code> y la paleta de colores, y modifica los píxeles en pantalla.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn- </span>draw-pixels
-  [{<span style="color:#a31515">:keys</span> [fire-pixels pallete] <span style="color:#a31515">:as</span> state}]
-  (<span style="color:#00f">let </span>[px (q/pixels)  <span style="color:#008000">;; screen pixels</span>
-        px-count (* 4 (* (* (q/display-density) (q/width))
-                         (* (q/display-density) (q/height))))
-        px-row (* 4 (* (q/display-density) (q/width)))
-        [width height] screen-dimension]
-    (<span style="color:#00f">loop </span>[i 0]
-      (when (&lt; i px-count)
-        (<span style="color:#00f">let </span>[pixel-value (get fire-pixels (/ i 4))
-              [r g b] (get pallete pixel-value)]
-          (aset px (+ i 0) r)
-          (aset px (+ i 1) g)
-          (aset px (+ i 2) b)
-          (aset px (+ i 3) 255))
-        (recur (+ i 4))))
-    (q/update-pixels)))
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a2f;font-weight:bold">defn- </span><span style="color:#b8860b">draw-pixels</span>
+  [{<span style="color:#b8860b">:keys</span> [<span style="color:#b8860b">fire-pixels</span> <span style="color:#b8860b">pallete</span>] <span style="color:#b8860b">:as</span> <span style="color:#b8860b">state</span>}]
+  (<span style="color:#a2f;font-weight:bold">let </span>[<span style="color:#b8860b">px</span> (<span style="color:#00a000">q/pixels</span>)  <span style="color:#080;font-style:italic">;; screen pixels</span>
+        <span style="color:#b8860b">px-count</span> (<span style="color:#a2f">* </span><span style="color:#666">4</span> (<span style="color:#a2f">* </span>(<span style="color:#a2f">* </span>(<span style="color:#00a000">q/display-density</span>) (<span style="color:#00a000">q/width</span>))
+                         (<span style="color:#a2f">* </span>(<span style="color:#00a000">q/display-density</span>) (<span style="color:#00a000">q/height</span>))))
+        <span style="color:#b8860b">px-row</span> (<span style="color:#a2f">* </span><span style="color:#666">4</span> (<span style="color:#a2f">* </span>(<span style="color:#00a000">q/display-density</span>) (<span style="color:#00a000">q/width</span>)))
+        [<span style="color:#b8860b">width</span> <span style="color:#b8860b">height</span>] <span style="color:#b8860b">screen-dimension</span>]
+    (<span style="color:#a2f;font-weight:bold">loop </span>[<span style="color:#b8860b">i</span> <span style="color:#666">0</span>]
+      (<span style="color:#a2f">when </span>(<span style="color:#a2f">&lt; </span><span style="color:#b8860b">i</span> <span style="color:#b8860b">px-count</span>)
+        (<span style="color:#a2f;font-weight:bold">let </span>[<span style="color:#b8860b">pixel-value</span> (<span style="color:#a2f">get </span><span style="color:#b8860b">fire-pixels</span> (<span style="color:#a2f">/ </span><span style="color:#b8860b">i</span> <span style="color:#666">4</span>))
+              [<span style="color:#b8860b">r</span> <span style="color:#b8860b">g</span> <span style="color:#b8860b">b</span>] (<span style="color:#a2f">get </span><span style="color:#b8860b">pallete</span> <span style="color:#b8860b">pixel-value</span>)]
+          (<span style="color:#a2f">aset </span><span style="color:#b8860b">px</span> (<span style="color:#a2f">+ </span><span style="color:#b8860b">i</span> <span style="color:#666">0</span>) <span style="color:#b8860b">r</span>)
+          (<span style="color:#a2f">aset </span><span style="color:#b8860b">px</span> (<span style="color:#a2f">+ </span><span style="color:#b8860b">i</span> <span style="color:#666">1</span>) <span style="color:#b8860b">g</span>)
+          (<span style="color:#a2f">aset </span><span style="color:#b8860b">px</span> (<span style="color:#a2f">+ </span><span style="color:#b8860b">i</span> <span style="color:#666">2</span>) <span style="color:#b8860b">b</span>)
+          (<span style="color:#a2f">aset </span><span style="color:#b8860b">px</span> (<span style="color:#a2f">+ </span><span style="color:#b8860b">i</span> <span style="color:#666">3</span>) <span style="color:#666">255</span>))
+        (<span style="color:#00a000">recur</span> (<span style="color:#a2f">+ </span><span style="color:#b8860b">i</span> <span style="color:#666">4</span>))))
+    (<span style="color:#00a000">q/update-pixels</span>)))
 </code></pre></div><p><code>(q/pixels)</code> regresa los píxeles de la pantalla. La librería que estamos utilizando (Quil) representa los píxeles como un conjunto de 4 números enteros representando el componente rojo, verde, azul y el nivel de alpha. Entonces por cada <code>fire-pixel</code> vamos a tener 4 elementos en <code>px</code>.</p>
 <p>Además de eso, dependiendo de la densidad de la pantalla va a ser el número de píxeles que se tengan que pintar. Para una pantalla de doble densidad (de las llamadas &ldquo;retina&rdquo; o &ldquo;Hi-DPI&rdquo;) <code>(q/display-density)</code> regresa 2, entonces en efecto estamos duplicando el número de píxeles por pantalla.</p>
 <p>Finalmente obtenemos el valor por píxel y el valor correspondiente en RGB de la paleta de colores, y aplicamos estos componentes al arreglo <code>px</code> que contiene los píxeles de pantalla, avanzando el ciclo de 4 en 4.</p>
@@ -257,14 +257,14 @@ Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recien
 </div>
 
 <p>Pueden mantener presionado shift para apagar el fuego temporalmente. Esta es mi parte favorita, ya que para simular que se apaga el fuego, literalmente tienes que eliminar el &ldquo;combustible&rdquo; poniendo el valor de la última fila en 0:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#00f">defn </span>toggle-fire
-  [{<span style="color:#a31515">:keys</span> [fire-pixels pressed-keys pixel-row pixel-count] <span style="color:#a31515">:as</span> state}]
-  (update-in state [<span style="color:#a31515">:fire-pixels</span>]
-             (<span style="color:#00f">fn </span>[fp]
-               (reduce (<span style="color:#00f">fn </span>[px i] (conj px (<span style="color:#00f">if </span>(&lt; i (- pixel-count pixel-row))
-                                             (get fp i)
-                                             (<span style="color:#00f">if </span>(contains? pressed-keys <span style="color:#a31515">&#34;space&#34;</span>) 0 35))))
-                       [] (range pixel-count)))))
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a2f;font-weight:bold">defn </span><span style="color:#b8860b">toggle-fire</span>
+  [{<span style="color:#b8860b">:keys</span> [<span style="color:#b8860b">fire-pixels</span> <span style="color:#b8860b">pressed-keys</span> <span style="color:#b8860b">pixel-row</span> <span style="color:#b8860b">pixel-count</span>] <span style="color:#b8860b">:as</span> <span style="color:#b8860b">state</span>}]
+  (<span style="color:#00a000">update-in</span> <span style="color:#b8860b">state</span> [<span style="color:#b8860b">:fire-pixels</span>]
+             (<span style="color:#a2f;font-weight:bold">fn </span>[<span style="color:#b8860b">fp</span>]
+               (<span style="color:#a2f">reduce </span>(<span style="color:#a2f;font-weight:bold">fn </span>[<span style="color:#b8860b">px</span> <span style="color:#b8860b">i</span>] (<span style="color:#a2f">conj </span><span style="color:#b8860b">px</span> (<span style="color:#a2f;font-weight:bold">if </span>(<span style="color:#a2f">&lt; </span><span style="color:#b8860b">i</span> (<span style="color:#a2f">- </span><span style="color:#b8860b">pixel-count</span> <span style="color:#b8860b">pixel-row</span>))
+                                             (<span style="color:#a2f">get </span><span style="color:#b8860b">fp</span> <span style="color:#b8860b">i</span>)
+                                             (<span style="color:#a2f;font-weight:bold">if </span>(<span style="color:#a2f">contains? </span><span style="color:#b8860b">pressed-keys</span> <span style="color:#b44">&#34;space&#34;</span>) <span style="color:#666">0</span> <span style="color:#666">35</span>))))
+                       [] (<span style="color:#a2f">range </span><span style="color:#b8860b">pixel-count</span>)))))
 </code></pre></div><h2 id="referencias">Referencias</h2>
 <ul>
 <li><a href="http://fabiensanglard.net/doom_fire_psx/index.html">How Doom fire was done</a></li>

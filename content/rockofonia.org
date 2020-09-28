@@ -1,0 +1,19 @@
+#+HUGO_TYPE: podcast
+
+* Rockofonia
+Rockofonia was a podcast centered around Hard Rock and Heavy Metal. It
+spanned two seasons with more than 200 episodes, and for a little
+while it even was syndicated in the BC México area. Episodes either
+feature [[https://usuario.cicese.mx/~jagm/index.html][Tony GM]] or myself as DJ.
+
+** Now in Spanish
+Rockofonia era un podcast de /Hard Rock/ y /Heavy Metal/. Logró más de
+200 episodios, y por un tiempo incluso fue sindicado en el area de BC
+México.
+
+* List of Episodes
+Episodes should be in chronological order for the most part.
+
+** Episode 0
+{{< audio src="/media/itbounce.mp3" >}}
+Download: [[/media/itbounce.mp3][itbounce.mp3]]
