@@ -1,4 +1,4 @@
-baseURL = "http://www.cesarolea.com/"
+baseURL = "//www.cesarolea.com/"
 languageCode = "en-us"
 title = "César Olea"
 theme = "hugo-ink"

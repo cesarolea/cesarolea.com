@@ -1,0 +1,80 @@
+#+TITLE: Raycasting Demo
+#+DATE: 2020-09-28T09:04:23-07:00
+#+HUGO_DRAFT: false
+
+I'm a fan of [[https://fabiensanglard.net][Fabien Sanglard's work]],
+and after reading his Wolfenstein 3D book I felt inspired to write my
+own raycasting engine. Once I was done, I wrote a series of articles
+in the [[https://devz.mx][devz.mx blog]] explaining how it all works.
+
+The engine is written in ClojureScript, as it allowed me to insert the
+running engine directly in the articles and people could play with
+it. It was written as a series of 5 articles, starting with the bare
+basics all the way to having a fully rendered and textured 3D world.
+
+Full source code is available in
+[[https://github.com/cesarolea/sheepish-3d][its github repository]].
+
+** Article 1
+
+   [[https://devz.mx/raycasting/][The first entry]] in the series
+   centered around the (surprisingly simple )math required to write
+   your own ray-caster. The demo is a demonstration of angle
+   normalization.
+
+   Use the arrow keys to change the angle.
+
+   {{< angles >}}
+
+** Article 2
+
+   [[https://devz.mx/raycasting-2/][The second article]] centered more
+   on how the different properties of the projection affected the way
+   the world is rendered. Concepts like /field of view/ (FOV), angles
+   between rays and movement in 2D space are introduced.
+
+*** Controls
+
+    - Up and down arrow keys: increase / decrease FOV.
+    - Left and right arrow keys: rotation.
+    - w a s d keys: up, down and strafing.
+    - j k: duplicate / halve number of rays casted.
+    - space bar: revert to default values.
+   
+    {{< fov >}}
+
+** Article 3
+
+   [[https://devz.mx/raycasting-3/][The third article]] is all about
+   the rays. Casting rays and checking for collisions. The demo is a
+   full 2D interactive representation.
+
+*** Controls
+
+    - Left and right arrow keys: rotation.
+    - w a s d keys: up, down and strafing.
+
+    {{< maze >}}
+
+** Article 4
+
+   [[https://devz.mx/raycasting-4/][The fourth article]] is when we go
+   3D. The bulk of the raycaster is already done, what remains is how
+   to calculate the column height, and correcting the "fishbowl"
+   effect.
+
+*** Controls
+    
+    - Left and right arrow keys: rotation.
+    - w a s d keys: up, down and strafing.
+    - Space bar: remove fishbowl effect correction.
+
+   {{< untextured >}}
+
+** Article 5
+
+   [[https://devz.mx/raycasting-5/][The final article]]. The end
+   result. The only thing that is left is texturing. Controls are the
+   same as before.
+
+   {{< textured >}}

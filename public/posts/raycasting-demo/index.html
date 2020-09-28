@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Raycasting Demo - César Olea</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta itemprop="name" content="Raycasting Demo">
+<meta itemprop="description" content="I&#39;m a fan of Fabien Sanglard&#39;s work, and after reading his Wolfenstein 3D book I felt inspired to write my own raycasting engine. Once I was done, I wrote a series of articles in the devz.mx blog explaining how it all works.
+ The engine is written in ClojureScript, as it allowed me to insert the running engine directly in the articles and people could play with it. It was written as a series of 5 articles, starting with the bare basics all the way to having a fully rendered and textured 3D world.">
+<meta itemprop="datePublished" content="2020-09-28T09:04:23-07:00" />
+<meta itemprop="dateModified" content="2020-09-28T09:04:23-07:00" />
+<meta itemprop="wordCount" content="342">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta property="og:title" content="Raycasting Demo" />
+<meta property="og:description" content="I&#39;m a fan of Fabien Sanglard&#39;s work, and after reading his Wolfenstein 3D book I felt inspired to write my own raycasting engine. Once I was done, I wrote a series of articles in the devz.mx blog explaining how it all works.
+ The engine is written in ClojureScript, as it allowed me to insert the running engine directly in the articles and people could play with it. It was written as a series of 5 articles, starting with the bare basics all the way to having a fully rendered and textured 3D world." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//www.cesarolea.com/posts/raycasting-demo/" />
+<meta property="article:published_time" content="2020-09-28T09:04:23-07:00" />
+<meta property="article:modified_time" content="2020-09-28T09:04:23-07:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Raycasting Demo"/>
+<meta name="twitter:description" content="I&#39;m a fan of Fabien Sanglard&#39;s work, and after reading his Wolfenstein 3D book I felt inspired to write my own raycasting engine. Once I was done, I wrote a series of articles in the devz.mx blog explaining how it all works.
+ The engine is written in ClojureScript, as it allowed me to insert the running engine directly in the articles and people could play with it. It was written as a series of 5 articles, starting with the bare basics all the way to having a fully rendered and textured 3D world."/>
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.css" />
+
+        <link id="dark-scheme" rel="stylesheet" type="text/css" href="/css/dark.css" />
+
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+		<script src="/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper">
+		<div class="header">
+	
+	<h1 class="site-title"><a href="//www.cesarolea.com/">César Olea</a></h1>
+	<div class="site-description"><p>Software Developer | CTO of <a href="https://loanpro.io">LoanPro</a></p><nav class="nav social">
+			<ul class="flat"><li><a href="https://github.com/cesarolea" title="Github"><i data-feather="github"></i></a></li><li><a href="https://linkedin.com/in/cesarolea" title="Linkedin"><i data-feather="linkedin"></i></a></li><li><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></li></ul>
+		</nav><span class="scheme-toggle"><a href="#" id="scheme-toggle"></a></div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">Blog</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="/rockofonia">Rockofonia</a>
+			</li>
+			
+			<li>
+				<a href="/resume.pdf">Resume</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post">
+			<div class="post-header">
+				
+					<div class="meta">
+						<div class="date">
+							<span class="day">28</span>
+							<span class="rest">Sep 2020</span>
+						</div>
+					</div>
+				
+				<div class="matter">
+					<h1 class="title">Raycasting Demo</h1>
+				</div>
+			</div>
+					
+			<div class="markdown">
+				
+<p>
+I&#39;m a fan of <a href="https://fabiensanglard.net">Fabien Sanglard&#39;s work</a>,
+and after reading his Wolfenstein 3D book I felt inspired to write my
+own raycasting engine. Once I was done, I wrote a series of articles
+in the <a href="https://devz.mx">devz.mx blog</a> explaining how it all works.</p>
+<p>
+The engine is written in ClojureScript, as it allowed me to insert the
+running engine directly in the articles and people could play with
+it. It was written as a series of 5 articles, starting with the bare
+basics all the way to having a fully rendered and textured 3D world.</p>
+<p>
+Full source code is available in
+<a href="https://github.com/cesarolea/sheepish-3d">its github repository</a>.</p>
+<div id="outline-container-headline-1" class="outline-3">
+<h3 id="headline-1">
+Article 1
+</h3>
+<div id="outline-text-headline-1" class="outline-text-3">
+<p>
+   <a href="https://devz.mx/raycasting/">The first entry</a> in the series
+   centered around the (surprisingly simple )math required to write
+   your own ray-caster. The demo is a demonstration of angle
+   normalization.</p>
+<p>
+   Use the arrow keys to change the angle.</p>
+<p>
+   <canvas id="angles-demo" style="padding-left: 0px; padding-right: 0px; margin-left: auto; margin-right: auto; display: block; image-rendering: optimizequality !important;" tabindex="0" width="512" height="320"></canvas>
+<script type="text/javascript" src="/public/angles-demo.js">JavaScript required</script>
+</p>
+</div>
+</div>
+<div id="outline-container-headline-2" class="outline-3">
+<h3 id="headline-2">
+Article 2
+</h3>
+<div id="outline-text-headline-2" class="outline-text-3">
+<p>
+   <a href="https://devz.mx/raycasting-2/">The second article</a> centered more
+   on how the different properties of the projection affected the way
+   the world is rendered. Concepts like <em>field of view</em> (FOV), angles
+   between rays and movement in 2D space are introduced.</p>
+<div id="outline-container-headline-3" class="outline-4">
+<h4 id="headline-3">
+Controls
+</h4>
+<div id="outline-text-headline-3" class="outline-text-4">
+<ul>
+<li>
+<p>Up and down arrow keys: increase / decrease FOV.</p>
+</li>
+<li>
+<p>Left and right arrow keys: rotation.</p>
+</li>
+<li>
+<p>w a s d keys: up, down and strafing.</p>
+</li>
+<li>
+<p>j k: duplicate / halve number of rays casted.</p>
+</li>
+<li>
+<p>space bar: revert to default values.</p>
+</li>
+</ul>
+<canvas id="world-building" style="padding-left: 0px; padding-right: 0px; margin-left: auto; margin-right: auto; display: block; image-rendering: optimizequality !important;" tabindex="0" width="512" height="320"></canvas>
+<script type="text/javascript" src="/public/world-building-demo.js">JavaScript required</script>
+
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-4" class="outline-3">
+<h3 id="headline-4">
+Article 3
+</h3>
+<div id="outline-text-headline-4" class="outline-text-3">
+<p>
+   <a href="https://devz.mx/raycasting-3/">The third article</a> is all about
+   the rays. Casting rays and checking for collisions. The demo is a
+   full 2D interactive representation.</p>
+<div id="outline-container-headline-5" class="outline-4">
+<h4 id="headline-5">
+Controls
+</h4>
+<div id="outline-text-headline-5" class="outline-text-4">
+<ul>
+<li>
+<p>Left and right arrow keys: rotation.</p>
+</li>
+<li>
+<p>w a s d keys: up, down and strafing.</p>
+</li>
+</ul>
+<canvas id="maze-runner" style="padding-left: 0px; padding-right: 0px; margin-left: auto; margin-right: auto; display: block; image-rendering: optimizequality !important;" tabindex="0" width="768" height="512"></canvas>
+<script type="text/javascript" src="/public/raycaster.js">JavaScript required</script>
+
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-6" class="outline-3">
+<h3 id="headline-6">
+Article 4
+</h3>
+<div id="outline-text-headline-6" class="outline-text-3">
+<p>
+   <a href="https://devz.mx/raycasting-4/">The fourth article</a> is when we go
+   3D. The bulk of the raycaster is already done, what remains is how
+   to calculate the column height, and correcting the &#34;fishbowl&#34;
+   effect.</p>
+<div id="outline-container-headline-7" class="outline-4">
+<h4 id="headline-7">
+Controls
+</h4>
+<div id="outline-text-headline-7" class="outline-text-4">
+<ul>
+<li>
+<p>Left and right arrow keys: rotation.</p>
+</li>
+<li>
+<p>w a s d keys: up, down and strafing.</p>
+</li>
+<li>
+<p>Space bar: remove fishbowl effect correction.</p>
+</li>
+</ul>
+<canvas id="sheepish-3D" style="padding-left: 0px; padding-right: 0px; margin-left: auto; margin-right: auto; display: block; image-rendering: optimizequality !important;" tabindex="0" width="512" height="384"></canvas>
+<script type="text/javascript" src="/public/raycaster.js">JavaScript required</script>
+
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-headline-8" class="outline-3">
+<h3 id="headline-8">
+Article 5
+</h3>
+<div id="outline-text-headline-8" class="outline-text-3">
+<p>
+   <a href="https://devz.mx/raycasting-5/">The final article</a>. The end
+   result. The only thing that is left is texturing. Controls are the
+   same as before.</p>
+<p>
+   <canvas id="textured" style="padding-left: 0px; padding-right: 0px; margin-left: auto; margin-right: auto; display: block; image-rendering: optimizequality !important;" tabindex="0" width="512" height="384"></canvas>
+<script type="text/javascript" src="/public/raycaster-textured.js">JavaScript required</script>
+</p>
+</div>
+</div>
+
+			</div>
+
+			<div class="tags">
+				
+					
+				
+			</div></div>
+	</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright César Olea 2020 </div>
+	</nav>
+</div><script>feather.replace()</script>
+</body>
+</html>

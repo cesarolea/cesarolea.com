@@ -1,0 +1,12 @@
+#+HUGO_BASE_DIR: ../
+#+HUGO_SECTION: posts
+#+HUGO_DRAFT: true
+
+#+TITLE: A Test Post in Org
+#+DATE: 2020-09-27
+#+AUTHOR: César Olea
+
+#+begin_src clojure
+  (println "This is a sample"
+           (str "Code" "Formatting"))
+#+end_src

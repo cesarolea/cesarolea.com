@@ -2,27 +2,37 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on César Olea</title>
-    <link>http://www.cesarolea.com/posts/</link>
+    <link>//www.cesarolea.com/posts/</link>
     <description>Recent content in Posts on César Olea</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Copyright César Olea 2020</copyright>
-    <lastBuildDate>Thu, 24 Sep 2020 11:58:00 -0700</lastBuildDate><atom:link href="http://www.cesarolea.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Sep 2020 09:04:23 -0700</lastBuildDate><atom:link href="//www.cesarolea.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Raycasting Demo</title>
+      <link>//www.cesarolea.com/posts/raycasting-demo/</link>
+      <pubDate>Mon, 28 Sep 2020 09:04:23 -0700</pubDate>
+      
+      <guid>//www.cesarolea.com/posts/raycasting-demo/</guid>
+      <description>I&amp;#39;m a fan of Fabien Sanglard&amp;#39;s work, and after reading his Wolfenstein 3D book I felt inspired to write my own raycasting engine. Once I was done, I wrote a series of articles in the devz.mx blog explaining how it all works.
+ The engine is written in ClojureScript, as it allowed me to insert the running engine directly in the articles and people could play with it. It was written as a series of 5 articles, starting with the bare basics all the way to having a fully rendered and textured 3D world.</description>
+    </item>
+    
     <item>
       <title>ClojureScript Setup Made Easier With Anvil</title>
-      <link>http://www.cesarolea.com/posts/clojurescript-setup-made-easier-with-anvil/</link>
+      <link>//www.cesarolea.com/posts/clojurescript-setup-made-easier-with-anvil/</link>
       <pubDate>Thu, 24 Sep 2020 11:58:00 -0700</pubDate>
       
-      <guid>http://www.cesarolea.com/posts/clojurescript-setup-made-easier-with-anvil/</guid>
+      <guid>//www.cesarolea.com/posts/clojurescript-setup-made-easier-with-anvil/</guid>
       <description>Some time ago I wrote a series posts in the devz.mx blog on setting up a ClojureScript project from scratch. I did it for learning how to do it myself. There’s multiple leiningen templates that will set it up for you, but I always fell short when wanting to set up a more complex environment such as a browser connected REPL, code evaluation from your editor, setting up multiple ClojureScript libraries, and more.</description>
     </item>
     
     <item>
       <title>Efecto De Fuego Con ClojureScript</title>
-      <link>http://www.cesarolea.com/posts/efecto-de-fuego-con-clojurescript/</link>
+      <link>//www.cesarolea.com/posts/efecto-de-fuego-con-clojurescript/</link>
       <pubDate>Wed, 15 May 2019 19:08:01 -0700</pubDate>
       
-      <guid>http://www.cesarolea.com/posts/efecto-de-fuego-con-clojurescript/</guid>
+      <guid>//www.cesarolea.com/posts/efecto-de-fuego-con-clojurescript/</guid>
       <description>This article was originally posted in the devz.mx blog.
 Terminé de leer el libro Game Engine Black Book: Doom de Fabien Sanglard recientemente, y uno de los capítulos que más disfruté fue el dedicado a los ports de Doom a las diferentes consolas de la época. Está lleno de detalles técnicos e historias sobre las restricciones sobre las cuales tenían que trabajar los programadores de la época para llevar uno de los títulos más populares y emblemáticos de la PC a consolas &amp;ldquo;imposibles&amp;rdquo; como el SNES.</description>
     </item>
