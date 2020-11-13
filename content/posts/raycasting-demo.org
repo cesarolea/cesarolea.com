@@ -18,7 +18,7 @@ Full source code is available in
 ** Article 1
 
    [[https://devz.mx/raycasting/][The first entry]] in the series
-   centered around the (surprisingly simple )math required to write
+   centered around the (surprisingly simple) math required to write
    your own ray-caster. The demo is a demonstration of angle
    normalization.
 

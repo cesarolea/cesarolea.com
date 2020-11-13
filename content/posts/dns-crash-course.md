@@ -1,0 +1,310 @@
++++
+title = "DNS Crash Course"
+author = ["César Olea Aguilar"]
+date = 2020-10-02T19:43:00-07:00
+draft = false
++++
+
+DNS is an integral part of the Internet and a very important
+application layer protocol. Still, developers building Web
+applications usually don't think about DNS and expect it to "just
+work", or don't take it into account when designing their systems.
+
+Well, not anymore. Read on for an explanation of what makes DNS tick,
+how to debug DNS issues and ultimately understand how your Web
+applications are resolved in order to build better software.
+
+Skip to [Tying it all together](#tying-it-all-together) for a hand on
+demonstration of how to use `dig` to understand DNS, but it won't make
+much sense without understanding the process first.
+
+
+## Motivation {#motivation}
+
+Knowing how to control and manipulate DNS will make your life
+easier, especially as you move towards design and architecture
+roles.
+
+When developing a new feature, API or product, it's critical that
+you know, understand and are able to manipulate the DNS record of
+the zone that you will be using for it. Features like vanity URLs,
+custom domains, redirects, SSL, load balancing, all of that depends
+on the proper configuration of DNS.
+
+It can also significantly speed your local Internet connection,
+block malware and advertising, and more.
+
+
+## What is DNS? {#what-is-dns}
+
+When someone talks about DNS, they might be referring to multiple
+things. DNS is a hierarchical, decentralized, heavily cached and
+recursive naming system. At its core is a _database_ with specific
+data structures to store various types of records. DNS is also a
+protocol for how to query that _database_. It is used mainly to map
+domain names to IP addresses.
+
+DNS the protocol can use many transport protocols, but most commonly
+uses UDP at port 53. Unlike HTTP, FTP, POP and other application layer
+protocols, DNS is a ****binary protocol****.
+
+The DNS system is made up of several parts. It's important to
+understand what they are so when you are working with DNS or debugging
+issues you know what the documentation or tool is referring to.
+
+
+### Parts of the DNS system {#parts-of-the-dns-system}
+
+-   Database system. Used to store records. It's not a general
+    purpose database, though it has been used to store other types of
+    information, for example to fight email spam.
+-   Records. Mappings created in the DNS database. There are various
+    types of records. Think of this as rows in a relational
+    table. See [Records](#types-of-dns-records) below.
+-   Query. A lookup sent to the DNS system asking for a specific
+    domain information.
+-   Resolver. What you typically use to query the DNS system. You
+    don't connect directly to a DNS server, instead you connect to a
+    resolver. There are many. Operating systems, standard libraries
+    and applications sometimes use their own, making things more
+    complicated.
+-   Name servers. When you think about DNS you probably are thinking
+    about name servers. These are the servers that respond to queries
+    and there are many types.
+-   TTL. Time To Live. This setting tells the resolver how long it
+    should keep a record in cache. Set it too low and it will
+    generate too much traffic to your authoritative server (don't
+    worry, I explain what these are [below](#how-a-dns-query-is-resolved)). Set it too high and you won't be able to do
+    quick changes.
+
+
+## Types of DNS records {#types-of-dns-records}
+
+DNS name servers store many types of records. It's important to know
+what they all mean.
+
+-   A record. _Address Mapping_. Also known as host record. Stores a
+    hostname (for example `lms`) and a corresponding IP address like
+    `52.45.78.83`
+-   AAAA record. Same as the A record, but for IPv6.
+-   CNAME record. _Canonical name_. Aliases one hostname to another
+    hostname. When the response to a query is a CNAME record, the DNS
+    system will repeat the query with the new hostname.
+
+The list above would be sufficient for most developers working with
+Web applications, but there are other records that are also very
+important and you should know:
+
+-   MX records. _Mail exchange_. Specifies the SMTP servers to use for
+    the zone (read, domain).
+-   NS records. _Name server_. Specifies the ****authoritative name
+    servers**** that will be used to resolve this zone. See [below](#how-a-dns-query-is-resolved) for an explanation on authoritative
+    name servers. This is how you can, for example, take your domain
+    registered with GoDaddy and administer it with Route53 (the
+    authoritative DNS system by AWS).
+-   SOA records. Start of Authority. It's the first record on a zone
+    file. Indicates the authoritative name server for this zone and
+    other zone related information.
+
+
+## How a DNS query is resolved {#how-a-dns-query-is-resolved}
+
+At the top of it all are 13 servers. These 13 servers are called root
+servers, and are maintained by the ****Internet Assigned Numbers
+Authority**** or _IANA_. Every resolver knows the IP addresses of these
+13 servers.
+
+| Hostname           | IPv4           | IPv6                | Operator                          |
+|--------------------|----------------|---------------------|-----------------------------------|
+| a.root-servers.net | 198.41.0.4     | 2001:503:ba3e::2:30 | Verisign                          |
+| b.root-servers.net | 199.9.14.201   | 2001:500:200::b     | University of Southern California |
+| c.root-servers.net | 192.33.4.12    | 2001:500:2::c       | Cogent Communications             |
+| d.root-servers.net | 199.7.91.13    | 2001:500:2d::d      | University of Maryland            |
+| e.root-servers.net | 192.203.230.10 | 2001:500:a8::e      | NASA                              |
+| f.root-servers.net | 192.5.5.241    | 2001:500:2f::f      | Internet Systems Consortium       |
+| g.root-servers.net | 192.112.36.4   | 2001:500:12::d0d    | US Department of Defense          |
+| h.root-servers.net | 198.97.190.53  | 2001:500:1::53      | US Army                           |
+| i.root-servers.net | 192.36.148.17  | 2001:7fe::53        | Netnod                            |
+| j.root-servers.net | 192.58.128.30  | 2001:503:c27::2:30  | Verisign                          |
+| k.root-servers.net | 193.0.14.129   | 2001:7fd::1         | RIPE                              |
+| l.root-servers.net | 199.7.83.42    | 2001:500:9f::42     | ICANN                             |
+| m.root-servers.net | 202.12.27.33   | 2001:dc3::35        | WIDE Project                      |
+
+The official root name servers file can always be found at
+[https://www.internic.net/domain/named.root](https://www.internic.net/domain/named.root)
+which I like to think as the bootstrap of the Internet.
+
+When your resolver issues a query, the query will traverse down the
+server hierarchy until it reaches what is know as its _authoritative
+name server_, which is a fancy name of referring to the name server
+that's got the answer.
+
+The first stop is one of the root servers.
+
+
+### Root servers {#root-servers}
+
+Assuming that your query is not cached, the root servers are the first
+stop in the quest for DNS records. It's job is to direct the query to
+a top level domain, or _TLD_. Since your resolver knows about these
+root servers, it is able to proceed.
+
+
+### TLD servers {#tld-servers}
+
+IANA manages the TLD servers. The TLD servers are split into two
+groups:
+
+1.  Generic top level domains suco as .com, .org, .net, .edu and
+    more. There's [a
+    ton of them](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#ICANN-era_generic_top-level_domains).
+2.  Country code top level domains. These are the .mx, .co.uk, .br, and
+    so on.
+
+The root name server will give you an answer about the TLD server that
+should follow, based on the top level domain of your query. That is,
+if it's `.com` then go here, if it's `.net` go there, etc.
+
+The job of the TLD is to direct you to an authoritative name server.
+
+
+### Authoritative name server {#authoritative-name-server}
+
+This is the server that has information about your specific
+domain. It's the last step of the resolver. NS records point to
+authoritative name servers.
+
+The result will be a CNAME (remember [canonical records](#types-of-dns-records)). Now your resolver will recursively
+take this CNAME record and issue a new query to resolve the DNS
+record of the name server, until it can get the A record of the
+query that you originally submitted.
+
+
+## Tying it all together {#tying-it-all-together}
+
+To better understand it all, let's say we want to resolve this super
+unknown domain name `www.cesarolea.com`. We will use the _Domain
+Information Groper_ tool otherwise known as `dig`.
+
+> Disclaimer: I will use the `@ns` option in the following examples to
+> force a query done using a specific resolver, however your results
+> might vary as it is highly dependant on your network settings
+
+```shell
+dig @1.1.1.1 www.cesarolea.com +trace
+```
+
+The result will be pretty verbose, but we can analyze it step by
+step.
+
+
+### Root servers {#root-servers}
+
+The first step is contacting our resolver in IP `1.1.1.1` in this
+case (since we forced `dig` use it for name resolution) and the
+resolver will contact the root servers to know which TLD to use
+
+```shell
+; <<>> DiG 9.10.6 <<>> @1.1.1.1 www.cesarolea.com +trace
+; (1 server found)
+;; global options: +cmd
+.			510166	IN	NS	a.root-servers.net.
+.			510166	IN	NS	b.root-servers.net.
+.			510166	IN	NS	c.root-servers.net.
+.			510166	IN	NS	d.root-servers.net.
+.			510166	IN	NS	e.root-servers.net.
+.			510166	IN	NS	f.root-servers.net.
+.			510166	IN	NS	g.root-servers.net.
+.			510166	IN	NS	h.root-servers.net.
+.			510166	IN	NS	i.root-servers.net.
+.			510166	IN	NS	j.root-servers.net.
+.			510166	IN	NS	k.root-servers.net.
+.			510166	IN	NS	l.root-servers.net.
+.			510166	IN	NS	m.root-servers.net.
+.			510166	IN	RRSIG	NS 8 0 518400 20201015200000 20201002190000 26116 . xEhSOlZxO8hyn9RB9oSt/4DwHte1eutylIPM6iprEVcFEjOFQ4qJQkXw xN2ogWz12athGKq4JF9WxZB4o+qhd/v2ihGkiqjtxFcQH27F+5dvU1Jd irzrXPo6GO5cndjYK3nkOCtJGjxgGFIIX+0TUhOU59TDkfBY6UBD7lAS tZoGkQFqAcCrnQ3ENucpN7Gp9marRTaYRFNlj45SH+i8X2GYFY14xhlL K6YKUaULNNqsRaQp1w7MlhpXq+KHYLIqFe/+eSEqa04558L/Gfz6RMNP Y/hfqwHnRiapnWC3qebD42hDhbC/Fdr90iO2ZW10EL3qewwAb+fPKv2/ 5UtiDg==
+;; Received 525 bytes from 1.1.1.1#53(1.1.1.1) in 31 ms
+```
+
+
+### TLD {#tld}
+
+From the root servers we got the proper TLD servers for our `.com`
+domain.
+
+```shell
+com.			172800	IN	NS	i.gtld-servers.net.
+com.			172800	IN	NS	g.gtld-servers.net.
+com.			172800	IN	NS	m.gtld-servers.net.
+com.			172800	IN	NS	e.gtld-servers.net.
+com.			172800	IN	NS	a.gtld-servers.net.
+com.			172800	IN	NS	b.gtld-servers.net.
+com.			172800	IN	NS	l.gtld-servers.net.
+com.			172800	IN	NS	d.gtld-servers.net.
+com.			172800	IN	NS	j.gtld-servers.net.
+com.			172800	IN	NS	c.gtld-servers.net.
+com.			172800	IN	NS	k.gtld-servers.net.
+com.			172800	IN	NS	f.gtld-servers.net.
+com.			172800	IN	NS	h.gtld-servers.net.
+com.			86400	IN	DS	30909 8 2 E2D3C916F6DEEAC73294E8268FB5885044A833FC5459588F4A9184CF C41A5766
+com.			86400	IN	RRSIG	DS 8 1 86400 20201015200000 20201002190000 26116 . mo5DAGGRFxGHjs+H3xi1ev/fSKCxRsT6DOwNbnY4ZEii4EAyc4tk/lCa aXEO1iwKjl5WfZSwRZ8WOuZvLvjYoWbPPDhy05j/wqv4kMW7m5Jvi6sN kdi09u/vEfXGrYltfzInx7/HiDoucp3S1HDlg0zTpUSaryBWmCoCh7De T+BiZgyo2ZnnWe0pwtqWQsnzcv8PwH18+VqwPvtwzfPaNySQiBH9tpJ9 ysRxDOI/W4yJlGA3yTSAxcdgd5Z36N44zlVWLT0/BG+zeKuC/lYlatQP 8MaQ39hkW+LHgvAQ99/PNAvK9PQf+1hEwyzcKHQGoYLgSpUvMp1JiRaW KjS/Fg==
+;; Received 1177 bytes from 2001:dc3::35#53(m.root-servers.net) in 70 ms
+```
+
+
+### Authoritative name servers {#authoritative-name-servers}
+
+From the TLD servers we got the authoritative name servers. These
+are the servers that ultimately know about our specific domain. In
+this case it seems `cesarolea.com` is using Route53 (AWS DNS
+service).
+
+```shell
+cesarolea.com.		172800	IN	NS	ns-624.awsdns-14.net.
+cesarolea.com.		172800	IN	NS	ns-435.awsdns-54.com.
+cesarolea.com.		172800	IN	NS	ns-1933.awsdns-49.co.uk.
+cesarolea.com.		172800	IN	NS	ns-1427.awsdns-50.org.
+CK0POJMG874LJREF7EFN8430QVIT8BSM.com. 86400 IN NSEC3 1 1 0 - CK0Q1GIN43N1ARRC9OSM6QPQR81H5M9A  NS SOA RRSIG DNSKEY NSEC3PARAM
+CK0POJMG874LJREF7EFN8430QVIT8BSM.com. 86400 IN RRSIG NSEC3 8 2 86400 20201008044114 20201001033114 24966 com. l1OVIJsccUokGhWAyWFevZEQfxZPhdQ75DRjtOTosLNklP/JgVcZ88EK zXkMrVZDRQworiQjLVQIajUlPNE+ZE6J+GxtO54iD75CM8bJ3V4LiOLZ WegKaGX3a+4IMW0B9xXIUSyt+WYQFGBpqbGuzrspSo4in64OIXbkt+7E 1H6qvEcTSOgIbq/Bs1k6Rhbv3NS68fSscvCFR3nB7NBtlQ==
+S4EV7AUHR1O2EF4EE68320R9LCBN7KEP.com. 86400 IN NSEC3 1 1 0 - S4EVG1T0BSONCRQJ0K9HNUQQ0H2R0HHC  NS DS RRSIG
+S4EV7AUHR1O2EF4EE68320R9LCBN7KEP.com. 86400 IN RRSIG NSEC3 8 2 86400 20201006055010 20200929044010 24966 com. rT28/eZdIgIXIk1i3uBZlghqtAyEBP7usqeJsCiqw/ptM8ZvF0Xj5X/m 5e5mfpnpfRgLOYFWOPrAMJyYWJg6rEsZrEWI6jPnUvQeQT6QGlvY89yV lPFD6CIvRm9DROegRzf8tHqj078y10MPZ2EqX9rogDWDrBDhi63Tu9uQ 1PAFFY7ySsqmXnXySoyaEcgDGF6L0EhRfiVkaL4on5h79A==
+;; Received 748 bytes from 2001:502:8cc::30#53(h.gtld-servers.net) in 74 ms
+```
+
+
+### A record {#a-record}
+
+Ultimately what we need is an IP address to go with the domain
+name. This is precisely what we get from the authoritative name
+servers.
+
+```shell
+www.cesarolea.com.	5	IN	A	52.217.41.171
+cesarolea.com.		172800	IN	NS	ns-1427.awsdns-50.org.
+cesarolea.com.		172800	IN	NS	ns-1933.awsdns-49.co.uk.
+cesarolea.com.		172800	IN	NS	ns-435.awsdns-54.com.
+cesarolea.com.		172800	IN	NS	ns-624.awsdns-14.net.
+;; Received 199 bytes from 2600:9000:5301:b300::1#53(ns-435.awsdns-54.com) in 31 ms
+```
+
+If `www.cesarolea.com` was a CNAME instead of an A record, the name
+server would have made another lookup with the CNAME result, and
+then finally the A record with the IP address. Here's an example
+with `mail.google.com`.
+
+```shell
+mail.google.com.	604800	IN	CNAME	googlemail.l.google.com.
+googlemail.l.google.com. 300	IN	A	172.217.9.5
+;; Received 87 bytes from 216.239.34.10#53(ns2.google.com) in 34 ms
+```
+
+`mail.google.com` is a CNAME pointing to `googlemail.l.google.com`
+and that, in turn, is an A record pointing to its final IP
+address.
+
+
+## Final words {#final-words}
+
+As always, there's more to DNS than meets the eye. I've tried to
+present here very practical information on DNS that should get you
+started on better understanding how DNS works, and debugging any
+issues you may find in your own applications.

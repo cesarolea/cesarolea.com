@@ -4,12 +4,27 @@
   
   <url>
     <loc>//www.cesarolea.com/</loc>
-    <lastmod>2020-09-28T09:04:23-07:00</lastmod>
+    <lastmod>2020-11-10T10:09:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>//www.cesarolea.com/posts/taking-smart-notes/</loc>
+    <lastmod>2020-11-10T10:09:00-07:00</lastmod>
   </url>
   
   <url>
     <loc>//www.cesarolea.com/posts/</loc>
-    <lastmod>2020-09-28T09:04:23-07:00</lastmod>
+    <lastmod>2020-11-10T10:09:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>//www.cesarolea.com/posts/dns-crash-course/</loc>
+    <lastmod>2020-10-02T19:43:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>//www.cesarolea.com/posts/literate-emacs-configuration/</loc>
+    <lastmod>2020-09-28T13:02:00-07:00</lastmod>
   </url>
   
   <url>

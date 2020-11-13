@@ -36,17 +36,17 @@ weight = 1
 
 [[menu.main]]
 name = "Blog"
-url = "/posts"
+url = "/posts/index.html"
 weight = 2
 
 [[menu.main]]
 name = "About"
-url = "/about"
+url = "/about/index.html"
 weight = 3
 
 [[menu.main]]
 name = "Rockofonia"
-url = "/rockofonia"
+url = "/rockofonia/index.html"
 weight = 4
 
 [[menu.main]]
