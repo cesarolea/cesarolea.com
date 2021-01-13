@@ -6,11 +6,21 @@
     <description>Recent content in Posts on César Olea</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© Copyright César Olea 2020</copyright>
-    <lastBuildDate>Tue, 10 Nov 2020 10:09:00 -0700</lastBuildDate>
+    <copyright>© Copyright César Olea 2021</copyright>
+    <lastBuildDate>Tue, 12 Jan 2021 20:01:00 -0700</lastBuildDate>
     
 	<atom:link href="//www.cesarolea.com/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Writing AWS lambdas with ClojureScript</title>
+      <link>//www.cesarolea.com/posts/aws-lambdas-with-clojurescript/</link>
+      <pubDate>Tue, 12 Jan 2021 20:01:00 -0700</pubDate>
+      
+      <guid>//www.cesarolea.com/posts/aws-lambdas-with-clojurescript/</guid>
+      <description>Rationale When I created the anvil template, I did it to learn how to create a ClojureScript project from scratch, tailoring it to my exact needs for frontend development. Those needs can be summarized in three key points:
+ Code reloading. A browser connected REPL. Connectivity to the REPL from Emacs/CIDER.  At the time I was doing a lot of frontend ClojureScript development in the form of animations with Quil (see my raycaster demo and the old-school fire effect) and the pattern for the template emerged from those projects, though it can also be used for more &amp;ldquo;serious&amp;rdquo; Web frontend development.</description>
+    </item>
     
     <item>
       <title>Free Your Brain, Free Yourself and Become a Better Professional</title>
