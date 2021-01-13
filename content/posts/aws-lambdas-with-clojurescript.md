@@ -578,6 +578,18 @@ we can have coordination without callbacks.
 (process-actions c)
 ```
 
+The result should be something like:
+
+```sh
+I'm done: :kinesis-push . Took 1037.6134152549344 ms.
+I'm done: :s3-download . Took 2960.371038999945 ms.
+I'm done: :dynamodb-request . Took 4736.172511271778 ms.
+All done! This was the result:
+[{:response :kinesis-push, :time 1037.6134152549344}
+ {:response :s3-download, :time 2960.371038999945}
+ {:response :dynamodb-request, :time 4736.172511271778}]
+```
+
 This coordination without callbacks can be leveraged in your lambda
 functions.
 
