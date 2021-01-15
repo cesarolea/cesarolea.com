@@ -482,6 +482,15 @@ production, beyond proof of concepts. Its ability to require
 JavaScript libraries from npm opens up the whole garden. [ClojureScript
 is not an Island](https://clojurescript.org/news/2017-07-12-clojurescript-is-not-an-island-integrating-node-modules).
 
+## Gotchas {#gotchas}
+
+In researching for this article I came across many pages using the AWS SDK as proof that their lambda was up and running and using npm packages. When trying to replicate in my own environment I couldn't get the same results. More specifically: I could get the AWS SDK to work correctly, but not other npm libraries. It would work locally running with node, but not in AWS.
+
+The reason is [the lambda runtime in AWS has the AWS SDK built in](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-layer-aws-sdk-latest-version/). You might include it in your project and use it correctly, thinking you are using the version you packages but that is not true. The proof is using a different npm library (in our case luxon) and get it to work properly.
+
+I tried using both shadow-npm and figwheel-main to create the package for executing as a lambda using npm packages, but wasn't successful. I'm not saying it's not possible, just that I couldn't get it to work. It would work locally, but not in AWS.
+
+In the end the method I present here is tried and tested and works with every npm library I've used. That being said, I prefer ClojureScript native libraries, and I think CLJSJS still has its place. Maybe a good compromise would be if you depend on a handful of npm libraries, learn how to package them for CLJSJS, submit it to their repository and maintain it!
 
 ## Extras {#extras}
 
