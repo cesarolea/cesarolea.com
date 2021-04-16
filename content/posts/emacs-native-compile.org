@@ -1,0 +1,164 @@
+#+HUGO_DRAFT: false
+#+TITLE: Native compilation and "pure" GTK in Emacs
+#+DATE: 2021-03-11T15:22:53-07:00
+
+There's some very exciting developments in the Emacs world: native
+compilation of elisp and a "pure" GTK frontend for Emacs.
+
+* "Pure" GTK frontend
+
+  [[https://emacshorrors.com/posts/psa-emacs-is-not-a-proper-gtk-application.html][Emacs is not a proper GTK application]]. There are many reasons for
+  things being this way, but this fact prevents Emacs from benefiting
+  from recent developments in GTK, for example hardware rendering,
+  smooth scrolling, crisp font rendering, wayland support, among other
+  things.
+
+* Native compilation
+
+  While the ~pgtk~ frontend of Emacs can make Emacs frames feel faster
+  and more responsive, native compilation simply turbocharges elisp
+  code execution. Native compilation, as the name implies, compiles
+  all the elisp into native binaries that Emacs can dynamically load
+  and execute. In benchmarks this is [[https://arxiv.org/pdf/2004.02504.pdf][from 2.3x up to 42x faster]](!!)
+  with respect to the equivalent byte-code execution.
+
+  In practice, the end result is a faster Emacs experience
+  overall. Everything is snappier, small lags with things like
+  bringing up a buffer list, switching buffers, searching for
+  candidates, autocompletion, using the agenda, all gone.
+
+* How to get pgtk and native compilation
+
+  Both pgtk and native compilation are not scheduled to land in Emacs
+  28, however there are people maintaining repositories in sync with
+  Emacs 28 plus native compilation and pgtk.
+
+  The one I'm using I took from a AUR package in the user contrib
+  repositores from Arch linux. The repo itself is here:
+  https://github.com/flatwhatson/emacs
+
+  
+** Compiling in Ubuntu 20.04
+
+   I'm currently using Ubuntu 20.04 at work so this is what we'll use
+   here.
+
+*** Install dependencies
+
+    #+begin_src sh
+      sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
+      sudo apt update
+      sudo apt install libxpm-dev libgif-dev libjpeg-dev libpng-dev libtiff-dev libx11-dev libncurses5-dev automake autoconf texinfo libgtk2.0-dev gcc-10 g++-10 libgccjit0 libgccjit-10-dev libjansson4 libjansson-dev
+    #+end_src
+
+    The "trick" here is to add ~ppa:ubuntu-toolchain-r~ as the version
+    of ~libgccjit~ shipped with Ubuntu 20.04 won't work for with Emacs
+    native compilation.
+
+*** Clone and configure
+
+    The next step is to clone the repository, switch to the proper
+    branch and configure everything for the final compilation step:
+
+    #+begin_src sh
+      git clone https://github.com/flatwhatson/emacs.git emacs-arch
+      git checkout pgtk-nativecomp
+      cd emacs-arch
+      export CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10
+      ./autogen.sh
+      ./configure --with-dbus --with-gif --with-jpeg --with-png --with-rsvg --with-tiff --with-xft --with-xpm --with-gpm=no --with-xwidgets --with-modules --with-native-compilation --with-pgtk --with-json CFLAGS="-O3 -mtune=native -march=native -fomit-frame-pointer"
+    #+end_src
+
+    If everything goes well, the next step is to compile Emacs.
+
+*** Compilation
+
+    The final step is to compile Emacs. It will take very long as it
+    needs to compile Emacs plus all the elisp code to native
+    code. This step will only compile the elisp code that is part of
+    Emacs, and not your own elisp code that is part of your
+    configuration (we'll do that later).
+
+    #+begin_src sh
+      make -j2 NATIVE_FULL_AOT=1
+    #+end_src
+
+    The ~-j2~ part is to tell the compiler how many cores to use for
+    the compilation. You can adjust here depending on your own
+    hardware. Nevertheless it will take a long time.
+
+    If everything goes well, you can execute your newly compiled Emacs
+    by: ~./src/emacs~. At this point you have an Emacs distribution
+    that is able to compile elisp to native code and load it
+    dynamically. On top of that, the frontend used is a proper GTK
+    application.
+
+*** Compiling all custom elisp
+
+    As stated before, the compilation step will only compile elisp
+    that is part of the Emacs distribution. We still have two more
+    sources of elisp that we would like to compile: elisp from our own
+    configuration or from a package repository (such as melpa), and
+    elisp that we might have installed from our OS package manager.
+
+**** Compiling our own configuration
+
+     We can add this to our configuration file to tell Emacs to
+     compile elisp when it loads it for the first time:
+
+     #+begin_src emacs-lisp
+       (when (fboundp 'native-compile-async)
+         (setq comp-deferred-compilation t
+               comp-deferred-compilation-black-list '("/mu4e.*\\.el$")))
+     #+end_src
+
+     With this configuration in place, whenever Emacs loads some elisp
+     that is not compiled yet, it will compile it and load it. We are
+     also blacklisting some modules because those were installed via
+     the OS and we will compile them separately.
+
+     While this works, we can also tell Emacs to compile everything
+     under certain directory. This can be useful to compile all our
+     packages from melpa:
+
+     #+begin_src emacs-lisp
+       (native-compile-async "~/.config/emacs/elpa/" 6 t)
+     #+end_src
+
+     Replace for the proper path of your melpa repository and the
+     number of cores you want to use for the compilation process (6 in
+     this case). Evaluate the form, and let Emacs do its magic.
+     
+**** Compiling elisp from OS packages
+
+     For system-wide packages that might need root permissions,
+     navigate to the directory where the elisp source files are
+     located and:
+
+     #+begin_src emacs-lisp
+       sudo emacs -Q -batch -L . -f batch-native-compile *.el
+     #+end_src
+
+     Replace ~emacs~ with the full path of the Emacs binary we just
+     compiled. In my case it is ~~/workspace/emacs/src/emacs~.
+
+*** Verify
+
+    To test that native compilation is on, evaluate the following:
+
+    #+begin_src emacs-lisp
+      (if (and (fboundp 'native-comp-available-p)
+             (native-comp-available-p))
+        (message "Native compilation is available")
+      (message "Native complation is *not* available"))
+    #+end_src
+
+* Conclusion
+
+  It's exciting to see both "pure" GTK and native compilation
+  advancing the state of Emacs. This is exactly the spirit of FLOSS
+  software that promotes ingenuity and advances the state of computing
+  forward. A similar jump in performances hadn't happened since the
+  90's when byte-code compilation was added to Emacs.
+
+  Enjoy faster Emacsing!

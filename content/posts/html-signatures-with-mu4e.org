@@ -1,0 +1,86 @@
+#+HUGO_DRAFT: true
+#+TITLE: HTML signatures with mu4e and Gmail
+#+DATE: 2021-03-16T16:16:18-07:00
+
+For a long time I've been searching for an email client that would fit
+my workflow. During my macOS days I was a happy Airmail customer,
+though I can't say that it adapted to my workflow more than I adapted
+to it. Then they decided to change to the subscription model and
+charge for "premium" features such as push notifications, and that's
+when I decided to stop using it.
+
+Now I'm back in GNU/Linux and I've tried several clients: Thunderbird,
+Geary, Claws, KMail, etc. None would meet the demands I had on a
+suitable email client. After much consideration I decided to take the
+plunge and use mu4e as I already use emacs for many other of my
+computing needs.
+
+I'm not going to describe how my mu4e workflow works as I'm still
+working on it. However one particular issue I found while setting up
+everything caught my attention on the basis of not being something
+that you necessarily think it will be complicated to set up, but it
+ends up being complicated for different reasons.
+
+* Email signatures
+
+While it used to be very common to have an email signature, nowadays
+it's more common in the workplace. Sometimes your employer will
+require a particular signature, usually with some HTML, images,
+etc. So even if you wanted to stick to plain text emails,
+unfortunately it's not your decision to make.
+
+* Attempt 1: HTML signature in mu4e
+
+mu4e as any email client has support for signatures. The variable
+~mu4e-compose-signature~ can be set to any text you want.
+
+For plain text emails this is very easy, set ~mu4e-compose-signature~
+to the text you want, and be done with it. For HTML emails it's
+actually more complicated. If you add the HTML code directly to this
+variable, when mu4e processes your email it will add the signature
+content to the HTML body, and the recipients will view the HTML code
+instead of the intended signature.
+
+In my config I have a hook ~(add-hook 'message-send-hook
+'org-mime-htmlize)~. I have this set because practically all messages
+I compose are sent as HTML (unfortunate, but that's the reality we
+live in). ~org-mime-htmlize~ doesn't know about your HTML signature so
+it takes your whole message, including its signature, treats it as
+plain text, and converts it to HTML.
+
+What we need is some way to tell ~org-mime-htmlize~ to ignore our
+signature while doing its thing. Adding a colon ~:~ character in front
+of each line of your signature will do just that, as it tells
+~org-mime~ to format the preceding text as preformatted text.
+
+This works relatively well, but...
+
+* Attempt 2: Base64 embedded image
+
+In enterprise / work email setups, it's rather common to have an image
+as signature. I find this annoying but I can't change this
+practice. In my case the image is hosted in a publicly accessible URL
+so it should be a case of just using the right URL in the HTML
+signature right? Wrong.
+
+My work email is hosted by Gmail. When my signature is sent, Gmail
+blocks the signature image from loading. I figured that encoding the
+signature as Base64 and using [[https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs][Data URLs]] would take care of the
+problem, but Gmail refuses to load it, I guess out of security
+concerns.
+
+* Attempt 3: But it works in Gmail
+
+What I ended up doing is rather simple. First I sent an email to
+myself using the Gmail interface. The message arrived and the
+signature displayed correctly. I inspected the source of the signature
+and sure enough, it contained a different URL for the image:
+
+#+begin_src html
+  <img alt=\"LoanPro\" src=\"https://ci5.googleusercontent.com/proxy/bl9k6Zg3juNxy-Cz5ETAa185cjwwciBBhzjk9ltCtHvEuF7mpsnQ7DTHpPL-pSfwofvuQyzoSxeiyCSEp3qQH6GKlnanrbiWrMvhackSiwdsmA_h2ywYVXw=s0-d-e1-ft#https://loanpro.io/wp-content/uploads/2020/07/cropped-new-logo-2-1.png\" style=\"max-width:120px;margin-top:8px\" class=\"CToWUd\">
+#+end_src
+
+Note how the original source of the image, hosted in the ~loanpro.io~
+domain, is included in the rewritten URL. So I simply copied this
+rewritten URL, included it as signature as described in Attempt 1, and
+that was it!
