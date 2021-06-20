@@ -1,0 +1,11 @@
+#+HUGO_DRAFT: false
+#+TITLE: BEDU Live - 2021 el año que migraste a la nube
+#+DATE: 2021-06-20T12:04:47-07:00 
+
+I was invited to participate in a recorded event organized by
+[[https://bedu.org/][BEDU]]. The topic was centered around migrating your operation to cloud
+computing, more specifically the AWS cloud. You can watch the
+recording [[https://www.youtube.com/watch?v=i7VFzXHH25k][in YouTube]]. It's also embedded below. The content is in
+Spanish.
+
+{{< bedulive >}}
