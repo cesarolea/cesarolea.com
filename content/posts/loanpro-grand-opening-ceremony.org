@@ -1,0 +1,17 @@
+#+HUGO_DRAFT: false
+#+TITLE: LoanPro Grand Opening Ceremony
+#+DATE: 2021-07-09T15:57:17-07:00
+
+On July 7th 2021 [[https://loanpro.io][LoanPro]] opened its new offices to the world. I was
+part of that celebration and was invited to give a speech. To me it
+was very exciting, and I saw it as the culmination of 9 years of
+building. Not only the software platform, but also a viable software
+development operation, a company with a culture where I'd like to
+work. It is also the beginning of LoanPro as a big player in the
+fintech space. This is just getting started.
+
+The news was [[https://www.prnewswire.com/news-releases/loanpro-secures-100-million-series-a-investment-from-ftv-capital-301325306.html][picked]] up [[https://fortune.com/2021/07/08/the-unobvious-ipo-winner/][everywhere]]. You can watch video of the whole
+event embedded below. [[https://youtu.be/IirzxZ9l8To?t=1294][Skip to 21:34]] for the best part (but I might be
+biased).
+
+{{< loanprograndopening >}}
