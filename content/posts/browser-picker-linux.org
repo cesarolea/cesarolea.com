@@ -1,0 +1,118 @@
+#+HUGO_DRAFT: true
+#+TITLE: A browser picker for the Linux desktop
+#+DATE: 2021-10-01T09:04:00-07:00
+
+As a user of multiple browsers, a very common use-case is opening a
+specific browser depending on the target URL. For example if you use
+Google Workspaces at work you might want to open Google specific links
+in Google Chrome, while keeping Firefox as your "main" browser. In
+macOS there's a very cool utility called [[https://www.choosyosx.com/][Choosy]] that does exactly what
+I'm describing, but I couldn't find anything in Linux. Fortunately it
+can be replicated rather easily.
+
+I've posted the [[https://gist.github.com/cesarolea/49c55749b48464322ef9475aa4e65a4a][instructions as a gist]] if you're interested on having
+the same functionality for you.
+
+* How it works
+
+  The full implementation consists on three parts:
+
+  1. A way to trigger our code when a link is clicked.
+  2. A way to define which URLs should open in which browser.
+  3. A way to decide and control which browser is opened depending on
+     the link URL that was clicked.
+
+** Triggering code when a link is clicked
+
+   We can do this by creating a ~.desktop~ file. I named mine "Choosy"
+   just to keep things consistent, but feel free to use whatever
+   name. To the desktop environment this will be our "browser" but in
+   reality it will simply invoke a script that we create.
+
+   #+begin_src
+[Desktop Entry]
+Name=Choosy
+GenericName=Browser Chooser
+Comment=Choose what browser to use for specific links
+Categories=Network;
+Exec=choosy %u
+Type=Application
+MimeType=x-scheme-handler/unknown;x-scheme-handler/about;text/html;text/xml;application/xhtml_xml;x-scheme-handler/http;x-scheme-handler/https;
+   #+end_src
+
+   The important bits are the `Exec` and `MimeType` properties. With
+   `Exec` we control what to execute when a link is clicked, and with
+   `MimeType` we let the desktop environment (Gnome, KDE or others)
+   know that this application of ours should be available as an
+   alternative browser choice.
+
+   Create this desktop file in ~~/.local/share/applications/~, log out
+   and log back in and you should be able to find it listed as an
+   option for default browser. For example in Gnome it will be listed
+   under Settings - Details - Default Applications - Web.
+
+** Define which URLs should open in which browser
+
+   I keep two sets of URLs for different matching types. I'm
+   interested in matching both exact URLs like https://www.mozilla.org
+   and also partial URLs such as [[https://drive.google.com][drive.google.com]] or
+   [[https://app.gotomeeting.com][app.gotomeeting.com]].
+
+   Create two files ~~/.config/url-start.txt~ and
+   ~~/.config/url-is.txt~
+
+   ~url-start.txt~ matches partial URLs, not considering the protocol,
+   URI or parameters.
+   
+   #+begin_src
+drive.google.com
+docs.google.com
+meet.google.com
+app.gotomeeting.com
+hangouts.google.com
+   #+end_src
+
+   ~url-is.txt~ matches exact URLs. If the protocol. URI or parameters
+   change it *won't* match.
+
+   #+begin_src
+https://www.mozilla.org
+https://en.wikipedia.org/wiki/English_Wikipedia
+https://blog.cesarolea.com/posts/emacs-native-compile/
+   #+end_src
+
+** Decide and control which browser to open
+
+   To tie it all together is a bash script. The script receives the
+   URL and compares it with the values found in the lists
+   above. Depending on where it's found one browser or the other is
+   selected.
+
+   #+begin_src sh
+   #!/bin/bash
+
+   URL=$1
+   DOMAIN=$(echo "$URL" | awk -F[/:] '{print $4}')
+
+   ## Domain starts with
+   if [[ $DOMAIN =~ $(echo ^\($(paste -sd'|' /home/your-user/.config/url-start.txt)\)$) ]]; then
+       chromium-browser "$URL" & disown
+   elif [[ $DOMAIN =~ $(echo ^\($(paste -sd'|' /home/your-user/.config/url-is.txt)\)$) ]]; then
+       firefox "$URL" & disown
+   else
+       firefox "$URL" & disown
+   fi
+   #+end_src
+
+   The logic itself is very simple, the most complex part is parsing
+   the files. It's also very easy to extend: say you want another list
+   of URLs, ones that should always open in another browser such as
+   [[https://nyxt.atlas.engineer/][Nyxt]]. Simply create another list, name it ~url-nyxt.txt~ and add
+   another ~elif~ block. Each block is evaluated in order, so if the
+   URL is found in other files it will be matched by the block that is
+   found first.
+
+* Closing Remarks
+
+  And that's it, an ersatz Choosy that's as simple or complex as you
+  want. Happy Hacking!
