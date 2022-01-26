@@ -1,0 +1,14 @@
+#+HUGO_DRAFT: true
+#+TITLE: Expreso Live - Economía para todos
+#+DATE: 2021-12-20T10:10:19-07:00
+
+[[https://www.expreso.com.mx/][Expreso]] is a regional newspaper and they invited me and other
+colleagues to participate in a segment called "economics for all" as
+the topic being discussed was how technology effects the economy. I
+had a great time; there simply wasn't enough time to cover everything
+that I wanted, so maybe there's opportunity for a v2? Thanks to
+Expreso for hosting. The content is embedded below and it's in
+Spanish.
+
+{{< video src="/media/economia-para-todos-expreso.mp4" >}}
+

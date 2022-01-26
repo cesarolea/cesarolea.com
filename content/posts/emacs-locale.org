@@ -1,0 +1,51 @@
+#+HUGO_DRAFT: false
+#+TITLE: Emacs locale
+#+DATE: 2022-01-11T09:49:08-07:00
+
+Multi-language computing has many challenges. During my day to day
+activities I constantly switch between English and Spanish, and though
+my whole OS and window manager is set up in English for consistency, I
+frequently need to type accénted wórds and other characters ñ.
+
+I'm also a big (though novice) user of the [[https://orgmode.org/manual/Agenda-Views.html][agenda]] present in Emacs
+orgmode. My problem is that for some unknown reason org timestamps
+would use days in Spanish instead of English. For example instead of
+[2022-01-11 Tue] (for Tuesday) it would say [2022-01-11 mar] (for
+Martes). This being Emacs I knew there had to be a way, just wasn't
+sure where to look. The usual advice is to set ~system-time-locale~ to
+"en" like this:
+
+#+begin_src emacs-lisp
+(setq system-time-locale "en")
+(setenv "LANG" "en")
+#+end_src
+
+But it doesn't work for Emacs client instances (when you are using
+Emacs as a daemon).
+
+The solution in my case is to set the ~LC_TIME~ environment variable
+before Emacs is launched. I use systemd and the unit file is in
+~/usr/local/lib/systemd/user/emacs.service~. This is the whole file:
+
+#+begin_src
+[Unit]
+Description=Emacs text editor
+Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/emacs --fg-daemon
+
+# Emacs will exit with status 15 after having received SIGTERM, which
+# is the default "KillSignal" value systemd uses to stop services.
+SuccessExitStatus=15
+
+# This is what I added to make Emacs daemon use the proper locale for org timestamps
+Environment=LC_TIME=en
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+#+end_src
+
+Reload, restart and that's it! Happy Hacking!

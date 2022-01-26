@@ -1,0 +1,6 @@
+<figure {{ with .Get "class" }}class="{{ . }}"{{ end }}>
+    <video controls>
+        {{ with .Get "src" }}<source src="{{ .  | relURL }}" type="video/mp4">{{ end }}
+        <p>Your browser doesn't support HTML5 video. </p>
+    </video>
+</figure>
