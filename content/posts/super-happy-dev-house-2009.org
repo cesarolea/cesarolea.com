@@ -1,0 +1,22 @@
+#+HUGO_DRAFT: true
+#+TITLE: Super Happy Dev House 2009
+#+DATE: 2022-02-08T14:16:35-07:00
+
+A blast from the past. My co-worker, ex-co-blogger and all time
+excellent friend [[https://axelvaldez.mx/][Axel Valdez]] shared with me this video recorded at the
+Super Happy Dev House event in Ciudad Obregón, México 2009. Apparently
+it was recorded [[https://www.pcgamer.com/heres-doom-running-on-100-pounds-of-moldy-potatoes/][with potatoes also used to power a TI-89 to run Doom.]]
+The video is in Spanish, and I demo my program "Everlasting Flame"
+named for the namesake track in [[https://open.spotify.com/track/5PVSkXQAfNkX23tDq4yvUh][Kreator's 1999 Endorama]].
+
+Everlasting Flame was a Blackberry dialer that would hang-up and
+re-dial automatically after a set period of time, notifying both
+parties using DTMF tones. I coded it to talk to my wife (then
+girlfriend) so in that sense it was a complete success. Mobile plans
+back then were very different, and you could avoid paying for extra
+minutes as long as you kept your calls under 5 minutes.
+
+The program was open source. Then a closed-source version was
+developed and sold, and I regretted it ever since.
+
+{{< shdh2009 >}}
