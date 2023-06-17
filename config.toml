@@ -4,7 +4,7 @@ title = "César Olea"
 theme = "hugo-ink"
 paginate = 5
 
-copyright = "© Copyright César Olea 2022"
+copyright = "© Copyright César Olea 2023"
 
 pygmentsstyle = "emacs"
 pygmentscodefences = true
