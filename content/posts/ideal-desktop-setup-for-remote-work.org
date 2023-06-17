@@ -1,6 +1,374 @@
----
-title: "Ideal Desktop Setup for Remote Work"
-date: 2023-01-23T12:09:53-07:00
-draft: true
----
+#+HUGO_DRAFT: false
+#+TITLE: My ideal desktop setup for remote work
+#+DATE: 2023-01-23T12:09:53-07:00
 
+I've been working remotely for more than a decade now. In that time I've gone through vastly different setups, arriving to what I consider *my* ideal desktop setup for remote work. Over the years I've changed computers (desktops, laptops), operating systems (virtualized Windows under OSX, OSX, Linux, back to macOS), desktop environments and/or window managers (Gnome, KDE, i3, Gnome+i3) and I've developed a series of small utilities and shortcuts to make my life easier during work hours. I've grown extremely accustomed to these settings and utilities that I've decided to document them, in hopes someone else finds them useful as well.
+
+For the longest time I used to run Linux at work, but circumstances are now that I use macOS. I've managed to get both environments working as similar as possible, but needless to say some things work better in one than the other. Here I'm documenting both setups, unfortunately I currently don't have access to my Linux config files. If there's interest I can update this post with more Linux detail.
+
+This setup *will drain your battery* faster as it runs multiple scripts continuously. There are ways to be more battery efficient, but it's the eternal balance between efficiency and convenience. I'm not terribly concerned for battery life as most of the time I'm plugged in at my home office and control battery charge cycles with the awesome [[https://apphousekitchen.com/][AlDente]] application. Back when I was using Linux I had a Lenovo Thinkpad and I used [[https://linrunner.de/tlp/index.html][TLP]].
+
+Without further ado, let's begin.
+
+* Window management with status bar
+
+In the past I found tiling window managers alluring but "exotic"; I understood the desire of automatic window placement and controlling window arrangements from the keyboard, but a successful adoption would be prevented by the one or two misbehaving applications, or the inability to control certain aspects of the desktop environment I was using.
+
+Until one day I took the plunge and decided to go without a desktop environment and roll a custom desktop with i3 as window manager initially, later replaced by [[https://regolith-linux.org/][regolith linux]] which also uses i3 as window manager but takes care of integrating i3 with the gnome desktop environment.
+
+While the window manager is important, equally important is the status bar. Basically a place to display important indicators such as current workspace, time, date, battery and many other indicators that I explain later.
+
+** Linux
+
+Regolith (gnome + i3) with [[https://polybar.github.io/][Polybar]] for status bar.
+
+** macOS
+
+[[https://github.com/koekeishiya/yabai][Yabai]] is an excellent tiling window manager for the macOS desktop. Unfortunately macOS makes it harder with each release to use a window manager, so yabai comes with its limitations, especially if you can't or won't disable system integrity protection (SIP).
+
+For status bar I use [[https://github.com/Jean-Tinland/simple-bar][simple-bar]], itself requiring both Yabai and [[https://github.com/felixhageloh/uebersicht][Übersicht]]. Simple-bar is finicky at times, but it works well enough. It's the only status bar I've found that's compatible with Yabai and has the ability to display only workspaces that actually have windows. This is important for me, as I always have 10 workspaces created but approximately half of them are empty at any given time. I would replace simple-bar with an alternative, if there was one.
+
+But all in all, simple-bar looks good, it's easy to configure and works well most of the time.
+
+[[file:/images/desktop.jpg]]
+
+* Browser chooser
+
+Firefox is my daily driver, but if you're a Web developer you're almost /required/ to at least test in Chrome, as that's what most of your users will use. Also there's the odd site that works better in Chrome, and for that I'd like the ability to specify certain rules to pick the best browser for the job automatically.
+
+For example, at work we use the Google Workspace tools. Ideally any link to Google drive, docs, hangougs, etc should open in Chrome automatically. Everything else should open in Firefox.
+
+** Linux
+
+I wrote a [[/posts/browser-picker-linux/index.html][custom script]] that advertises itself as a desktop browser. The idea is you select this "browser" as your default choice and when a link is clicked, your desktop environment will pass the URL to your script. The script then uses rules you write to open the link in whatever browser you choose.
+
+** macOS
+
+[[https://choosy.app/][choosy]] gets the job done and has the ability to do much more. Actually choosy was the inspiration to build my custom Linux solution.
+
+* Toggle audio output with indicator
+
+I prefer wired peripherals to their wireless counterparts. While convenient for mobility and tidiness, with wireless you need to deal with battery life and connectivity issues. For someone working remotely, a good pair of wired headphones with high-quality audio should be high on their priority list. Not working in a shared space allows me to not having to use headphones the whole day, so I constantly switch between two audio outputs:
+
+1. External speakers
+2. Headphones
+
+The idea is to be able to switch between the external speakers and headphones as audio output with a keypress, or in my case with your foot using a foot pedal. When pressed, whatever is playing through the current audio output should now be playing through the other output, and vice versa. Also the current audio output must be visible at all times for convenience and reassurance; when in a meeting you want to be sure that at least *your* audio settings are correct.
+
+** Linux
+
+I wrote a custom script in python using [[https://pypi.org/project/pulsectl/][pulsectl]]. The script had a list of hardcoded outputs and switched between the two. The indicator was a Polybar custom script module displaying the script output.
+
+** macOS
+
+A custom shell script using [[https://github.com/deweller/switchaudio-osx][SwitchAudioSource]]:
+
+#+begin_src shell
+#!/bin/bash
+
+CURRENT_AUDIO_OUTPUT=$(SwitchAudioSource -f cli -t output -c | cut -d ',' -f1)
+HEADSET="Sennheiser SC 1x5 USB"
+SPEAKERS="USB Advanced Audio Device"
+
+## toggle audio output
+if [ "$CURRENT_AUDIO_OUTPUT" = "$SPEAKERS" ]; then
+    SwitchAudioSource -t output -s "$HEADSET"
+    osascript -e 'display notification "Switched to headset" with title "Audio output"'
+else
+    SwitchAudioSource -t output -s "$SPEAKERS"
+    osascript -e 'display notification "Switched to external speakers" with title "Audio output"'
+fi
+#+end_src
+
+simple-bar has support for displaying the current audio output.
+
+* Toggle audio input (live microphone) with indicator
+
+Similar to audio output, audio input is even more important. Any remote worker will have funny (or not so funny) stories about someone leaving their microphone live when they were supposed to be muted. To avoid similar situations or the usual "you're muted!" remark from your coworkers, an universal audio mute/unmute toggle is crucial.
+
+In this case I'm not switching between two audio inputs. I do have multiple microphones (for example, my webcam has an included microphone) but when I'm at my desk I only use one: the headset microphone. The toggle is to mute/unmute the headset microphone.
+
+** Linux
+
+Again a simple python script with [[https://pypi.org/project/pulsectl/][pulsectl]] gets the job done. A custom script module for Polybar takes care of the indicator, displaying a red microphone icon when unmuted, and green when muted. When the microphone is not in use the icon is white. Very pleasant to use.
+
+** macOS
+
+In macOS this is surprisingly hard to achieve. My current solution is a [[https://medium.com/macoclock/how-in-the-bleep-do-i-mute-my-mic-anywhere-on-macos-d2fa1185b13][custom automator workflow]] that I found searching around for ways to achieve this in macOS.
+
+#+begin_src js
+on getMicrophoneVolume()
+    input volume of (get volume settings)
+end getMicrophoneVolume
+
+on disableMicrophone()
+    set volume input volume 0 without output muted
+    display notification "Microphone is muted." with title "Muted microphone"
+end disableMicrophone
+
+on enableMicrophone()
+    set volume input volume 75
+    display notification "Microphone is live." with title "Hot microphone" subtitle "People can hear you"
+end enableMicrophone
+
+set micvolume to getMicrophoneVolume()
+if micvolume is greater than 0 then
+    disableMicrophone()
+else
+    enableMicrophone()
+end if
+#+end_src
+
+With the workflow in place I need a way to run it with a keypress (or a foot stomp in my case) and that's done like this: ~/usr/bin/automator ~/Library/Services/mic-toggle.workflow~.
+
+This solution leaves much to be desired, but it's better than nothing. For instance simple-bar does support displaying the mic level, but it takes a long time to refresh, that's why I display a notification when toggling to make sure that the audio is being muted/unmuted. Also there's no way to change the indicator to be a different color when the mic is live.
+
+* Weather
+
+A weather widget may not seem like much, after all you don't need constant updates on the weather and there's multitude of websites, widgets or even command line applications that can get it for you. Your smartphone for sure has a full-featured weather application.
+
+So why waste screen real-estate, battery life and CPU cycles in a weather indicator? What I've found is that weather is a frequent small-talk conversation point, especially if you're far away from your interlocutor. I'm from México, and more often than not I get the question "is it too hot where you are?" or "what's the weather like where you're at?". Add in the need to convert ℃ to ℉ and you've got a pretty good justification for a weather indicator.
+
+In this case what I use is the same in Linux and macOS, which is nice. A custom [[https://github.com/babashka/babashka][babashka]] script using [[https://openweathermap.org/][OpenWeather]] for outside weather and [[https://homebridge.io/][homebridge]] to poll temperature from "smart" home devices inside my house to get the temperature inside my office. Using babashka is especially nice since the same script can be reused without further modifications.
+
+I'm sharing the script here, but it won't work for you without significant modifications:
+
+#+begin_src clojure
+#!/opt/homebrew/bin/bb
+
+(require '[clojure.java.shell :refer [sh]]
+         '[clojure.string :refer [split]]
+         '[babashka.curl :as curl]
+         '[cheshire.core :as json])
+
+(def office-ac-accessory-url "redacted")
+(def office-login            "redacted")
+(def weather-url             "redacted")
+
+(defn get-access-token [user password]
+  (let [resp (json/parse-string
+              (:body
+               (curl/post office-login
+                          {:body (json/generate-string {:username user :password password})
+                           :headers {"accept" "*/*" "Content-Type" "application/json"}})))]
+    (-> resp (get "access_token"))))
+
+(defn get-weather-openweather []
+  (let [weather (json/parse-string (:body (curl/get weather-url)))]
+    {:temp (->> (-> weather (get "main") (get "temp"))
+                (format "%.1f"))
+     :temp-int (-> weather (get "main") (get "temp"))
+     :humidity (-> weather (get "main") (get "humidity") (str "%"))
+     :wind (-> weather (get "wind") (get "speed") str)
+     :sky (-> weather (get "weather") first (get "description"))}))
+
+(defn get-office-temp
+  [user password]
+  (let [resp (json/parse-string
+               (:body (curl/get office-ac-accessory-url
+                                {:headers {"accept" "*/*"
+                                           "Authorization" (str "Bearer " (get-access-token user password))}})))]
+    (-> resp (get "values") (get "CurrentTemperature"))))
+
+(defn to-faren [celcius]
+  (+ (* 9/5 celcius) 32))
+
+(defn get-weather
+  [user pass]
+  (let [{:keys [temp humidity sky temp-int]} (get-weather-openweather)]
+    (println (str temp "C")
+             (str (int (to-faren temp-int)) "F")
+             sky
+             (str "(" (get-office-temp user pass) "C)")
+             humidity)))
+
+(defn get-authinfo-cmd [host]
+  (sh "/opt/homebrew/bin/emacsclient" "-e"
+      (str "(efs/lookup-password :host \"" host "\")")))
+
+(try
+  (get-weather "admin" (-> "homebridge"
+                           get-authinfo-cmd
+                           :out
+                           (split #"\"")
+                           second))
+  (catch Exception _ (System/exit 1)))
+#+end_src
+
+* Prevent sleep with indicator
+
+When I'm working at home I'm usually sitting at my desk with my laptop plugged in. I don't like it constantly going to sleep when not in use, for example when reading a long article, jotting down notes in my notebook, or consulting offline documentation.
+
+** Linux
+
+I used a custom script that manipulated gnome settings. Another custom script module for Polybar would get the current "sleep" status and display a yellow coffee mug (inspired by [[https://keepingyouawake.app/][keepingyouawake]]) when on, and white when off.
+
+** macOS
+
+The aforementioned [[https://keepingyouawake.app/][keepingyouawake]] is a good choice, but simple-bar has this included. It uses the ~caffeinate -disu~ command under the hood. It gets the job done and also provides a visual indicator of when it's on.
+
+* Smart calculator
+
+Similar to my use case for the weather indicator, a "smart" calculator can do unit conversions such as currency, measurement units, etc. Especially useful when coworkers ask or mention distances, weights and the like in imperial units and I need to convert from metric.
+
+** Linux
+
+[[https://github.com/svenstaro/rofi-calc][rofi-calc]] is everything I would want from such a tool. It allows you to do quick calculations that update as you type them, it keeps a history of calculations and you can send the result to the clipboard to paste in another window. It's great.
+
+** macOS
+
+The closes I could get to the Linux solution is [[http://qalculate.github.io/][qalculate]] cli. qalculate uses the same underlying calculation engine than rofi-calc so they are on par in terms of calculation features, but rofi-calc is more convenient. There are other solutions native to the mac desktop such as [[https://soulver.app/][soulver]] and [[https://numi.app/][numi]], but none integrate particularly well with my keyboard-driven desktop. Soulver gets close with its "quick soulver" mode, but it requires the soulver application to be open at all times for it to work properly.
+
+* Screenshots
+
+Taking screenshots and sharing them with your coworkers is an essential part of any software developer, but especially remote workers, so it makes sense to optimize this workflow for low friction. What I need from such a tool is:
+
+1. To be able to take a screenshot of a portion of the screen
+2. Store the screenshot in my computer, in a designated folder
+3. Have the screenshot uploaded to some private online storage where I have some control of who can access it
+4. Automatically create a public link, ideally shortened, and copy the link to the clipboard ready to be shared
+
+** Linux
+
+I used a combination of scripts to achieve the desired effect:
+
+- A script would use ~gnome-screenshot~ to take a screenshot and save it to a particular folder
+- A service would be running in the background monitoring the screenshots folder with ~inotify~
+- When a new screenshot was detected, another script would upload it to my Dropbox account using a custom Dropbox application (no Dropbox daemon required)
+- When the upload finished, a URL shortener service would be used to get a shortened public URL copied to the clipboard
+
+** macOS
+
+It works very much the same, except it uses the ~screencapture~ command included in macOS:
+
+#+begin_src shell
+#!/bin/bash
+
+DATE=$(date "+%Y-%m-%d-%H-%m-%S")
+screencapture -x -i /tmp/Screenshot.png
+mv /tmp/Screenshot.png /tmp/Screenshot-$DATE.png
+
+## if arg "up" is supplied, screenshot is uploaded to dropbox
+case "$1" in
+    "up")
+        echo "Uploading to dropbox"
+        cp /tmp/Screenshot-$DATE.png /Users/cesar.olea/Pictures/screenshots/
+
+        ## Why not upload by copying to the dropbox folder? By uploading
+        ## via the API we can avoid installing the dropbox client
+        dropbox-uploader /tmp/Screenshot-$DATE.png;;
+    ,*)
+        cp /tmp/Screenshot-$DATE.png ~/Pictures/screenshots/;;
+esac
+
+rm /tmp/Screenshot-$DATE.png
+#+end_src
+
+~dropbox-uploader~ is an utility to upload to my Dropbox account, without having to install the Dropbox client. It may be easier to simply copy the screenshot to a specific Dropbox-shared folder:
+
+#+begin_src shell
+#!/bin/bash
+
+if [[ $1 == 0 ]];
+  then
+    echo "Filename must be supplied. Exiting."
+    exit 1
+fi
+
+PASSWORD=$(emacsclient -e "(efs/lookup-password :host \"dropbox\")" | cut -d '"' -f2)
+FILE_NAME=$(echo $1)
+BASE_FILE=$(basename "$FILE_NAME")
+
+if [[ -f $1 ]]; then
+    # try deleting it first
+    curl -X POST https://api.dropboxapi.com/2/files/delete_v2 --header "Authorization: Bearer $PASSWORD" --header "Content-Type: application/json" --data "{\"path\": \"/screenshots/$BASE_FILE\"}" || true
+    osascript -e 'display notification "Uploading screenshot" with title "Screenshot"'
+    sleep 3
+    curl -X POST https://content.dropboxapi.com/2/files/upload --header "Authorization: Bearer $PASSWORD" --header "Dropbox-API-Arg: {\"path\":\"/screenshots/$BASE_FILE\"}" --header "Content-Type: application/octet-stream" --data-binary @"$FILE_NAME"
+    BASE_URL=$(curl -X POST https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings --header "Authorization: Bearer $PASSWORD" --header "Content-Type: application/json" --data "{\"path\": \"/screenshots/$BASE_FILE\",\"settings\": {\"requested_visibility\": \"public\",\"audience\": \"public\"}}" | jq -r .url)
+    SHORTENED_URL=$(curl --data-urlencode "url=$BASE_URL" https://tinyurl.com/create.php | grep "a href=\"https://tinyurl.com/" | sed -n 's:.*<b>\(.*\)</b>.*:\1:p')
+    echo "$SHORTENED_URL" | pbcopy
+    osascript -e 'display notification "Screenshot share URL copied to clipboard" with title "Screenshot"'
+else
+    echo "file $FILE_NAME doesn't exists"
+fi
+#+end_src
+
+* Do not disturb toggle with indicator
+
+You're easily distracted when attending meetings via your computer and a multitude of applications are fighting to get your attention. The do not disturb toggle mutes notifications so you can concentrate on the task at hand, and also protects your privacy when sharing your screen with coworkers.
+
+** Linux
+
+I used [[https://github.com/dunst-project/dunst][dunst]] as a notification client. A custom script would take care of stopping the dunst daemon so notifications wouldn't show up. With the same keypress dunst would restart and pending notifications would show. A custom script module for Polybar would display the DND status checking to see if dunst was running or not. If it wasn't running then we're in DND mode. It's simple and gets the job done.
+
+** macOS
+
+I love the simplicity of the Linux version and tried to replicate the same. The OS has a native "focus mode" feature but it's much more complicated, handling multiple profiles and with the ability to sync across devices. I found that it's not possible to toggle DND from the command line; I could set DND but I couldn't turn it off, and it would be inconsistent.
+
+Currently I use the focus mode feature to set the "Do Not Disturb" profile, triggering it the way Apple intended: using the mouse from the menu bar. I can also use my phone as a remote control for this (I have an iPhone) so that's a neat feature. However I am looking for better ways to achieve this.
+
+* Email client and message notification widget
+
+This is one of the rare setups that work the same for Linux and macOS. My mail setup is complex enough to warrant a separate article. In short, I use ~isync~ to sync my mail from remote servers to local storage, ~mu~ for local indexing and search, and ~mu4e~ as an email client.
+
+Having my mail locally allows me to do various queries that would require some sort of API access, if at all possible, with remote providers. What I need is to display message count with various criteria: work unread, personal unread, personal inbox and drafts. I practice "[[https://www.techtarget.com/whatis/definition/inbox-zero][inbox zero]]", and having the email count visible at all times helps me being more organized and avoid procrastination and reverting back to using my inbox as a task manager and general message repository.
+
+The notification widget displays something like ~11/0/1/0~ which reads "there's 11 unread work emails, 0 personal unread emails, there's 1 message (read or unread) in the personal inbox, and 0 drafts (work or otherwise)".
+
+I then use a custom perl script:
+
+#+begin_src perl
+#!/opt/homebrew/bin/perl
+
+## unread in loanpro inbox
+chomp(my @lpu=`/opt/homebrew/bin/mu find flag:unread AND maildir:"/loanpro/Inbox" AND NOT '(maildir:"/loanpro/[Gmail]/Trash" OR flag:trashed)' 2>/dev/null`);
+
+## unread in fastmail inbox
+chomp(my @fsu=`/opt/homebrew/bin/mu find '(maildir:"/fastmail/INBOX" AND flag:unread)' AND NOT flag:trashed 2>/dev/null`);
+
+## messages in fastmail inbox
+chomp(my @fsi=`/opt/homebrew/bin/mu find maildir:"/fastmail/INBOX" AND NOT flag:trashed 2>/dev/null`);
+
+## drafts
+chomp(my @draft=`/opt/homebrew/bin/mu find '(maildir:"/loanpro/[Gmail]/Drafts" OR maildir:"/fastmail/Drafts" OR maildir:"/Drafts")' AND NOT flag:trashed 2>/dev/null`);
+
+if( $#lpu < 0 and $#fsu < 0 and $#fsi < 0 and $#draft < 0) {
+    printf "%s","";
+} else {
+    printf "%d/%d/%d/%d",$#lpu+1,$#fsu+1,$#fsi+1,$#draft+1;
+}
+
+exit;
+#+end_src
+
+The same script can be used as a custom script module in Polybar, or a user script in simple-bar.
+
+* Useful but less interesting
+
+** Web browser
+
+Firefox with the fol
+lowing extensions:
+
+- Tree style tab, for better screen real-estate use
+- Auto tab discard, for resource management
+- Multi-account container, for keeping things isolated from each other: work, personal, banking, etc.
+- Dark reader, for using a custom theme in sites that don't have a dark mode
+- AWS Extend Switch Roles, for quickly switching between AWS roles at work
+- Ghost Text, for editing browser text areas in emacs
+
+** Editor
+
+Emacs is my editor of choice. With a tiling window manager, emacs running as a server is a great experience. Let the window manager manage the windows, opening new frames is extremely quick, and opened buffers persist as long as emacs is running.
+
+* Hardware
+
+If it was up to me, I would use a desktop computer for work. I follow the same logic as I do for wired peripherals: with a desktop computer you have less things to worry about, such as thermals (CPU throttling and the like), room for expansion, more connectivity without having to use hubs or docks, etc. at the price of mobility and potentially the need to synchronize between two computers (desktop, laptop) for when you are on the road. Nowadays I use a laptop (Apple M1 Pro 16 inch, 2021 model) almost always in clamshell mode (closed display) connected to an external display via an USB-C hub. The hub provides multiple ports to connect different peripherals:
+
+- External speakers via audio jack
+- Wired USB keyboard (Ergodox EZ)
+- External display via USB-C
+- External webcam
+- Wired mouse
+- Ethernet port
