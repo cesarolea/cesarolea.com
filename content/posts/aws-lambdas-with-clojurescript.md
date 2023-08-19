@@ -4,6 +4,9 @@ author = ["Cesar Olea"]
 date = 2021-01-12T20:01:00-07:00
 +++
 
+## Deprecation notice! {#note}
+This article has been superseeded by [writing AWS lambdas with shadow-cljs]({{< relref "/posts/writing-aws-lambdas-with-shadow-cljs.org" >}}). Most of the information contained here should still work, but I don't recommend following this approach as shadow-cljs presents a much better development story. Still some of the information presented here is still valid and valuable, such as the use of core.async.
+
 ## Rationale {#rationale}
 
 When I created [the anvil template](https://github.com/cesarolea/anvil-lein-template), I did it to learn how to create a
