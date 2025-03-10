@@ -2,9 +2,12 @@ baseURL = "//www.cesarolea.com/"
 languageCode = "en-us"
 title = "César Olea"
 theme = "hugo-ink"
-paginate = 5
+## paginate = 5
 
-copyright = "© Copyright César Olea 2023"
+[pagination]
+  pagerSize = 5
+
+copyright = "© Copyright César Olea 2024"
 
 pygmentsstyle = "emacs"
 pygmentscodefences = true
