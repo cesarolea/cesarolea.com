@@ -1,0 +1,18 @@
+#+HUGO_DRAFT: false
+#+TITLE: Association for Financial Technology - Spring Summit 2024
+#+DATE: 2024-05-11T13:13:03-07:00
+
+On March 2024 I was honored to be invited, along with my friends and
+coworkers Rhett Roberts and Lloyd Roberts, to participate as keynote
+speaker at the [[https://www.aftweb.com/about-aft-0][Brandon Dewitt Technology Keynote]] for the Association
+for Financial Technology (AFT) spring summit. The opportunity to get
+to know many of my peers in the broader fintech industry was a great
+experience, and something I hope can be repeated some time in the future.
+
+Click on any of the timestamps below to jump to the video at the
+specific section:
+
+1. Rhett Roberts: [[https://vimeo.com/944055637/e86af20d32][00:00 - 20:48]]
+2. César Olea: [[https://vimeo.com/944055637/e86af20d32#t=20m48s][20:48 - 36:25]]
+3. Rhett Roberts: [[https://vimeo.com/944055637/e86af20d32#t=36m25s][36:25 - 50:09]]
+4. Lloyd Roberts: [[https://vimeo.com/944055637/e86af20d32#t=50m09s][50:09]]
