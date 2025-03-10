@@ -4,9 +4,6 @@ title = "César Olea"
 theme = "hugo-ink"
 ## paginate = 5
 
-[pagination]
-  pagerSize = 5
-
 copyright = "© Copyright César Olea 2024"
 
 pygmentsstyle = "emacs"
@@ -14,6 +11,15 @@ pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 
 googleAnalytics = "UA-123-45"
+
+[pagination]
+  pagerSize = 5
+
+# fix unsafe render warning
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
 
 [params]
 	subtitle = "Software Developer | CTO of [LoanPro](https://loanpro.io)"
@@ -94,3 +100,4 @@ gzip = false
 [[deployment.matchers]]
 pattern = "^.+\\.(html|xml|json)$"
 gzip = true
+
