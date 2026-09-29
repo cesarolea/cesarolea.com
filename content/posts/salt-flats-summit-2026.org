@@ -1,0 +1,15 @@
+#+TITLE: Salt Flats Summit 2026
+#+date: 2026-09-29T11:56:17-07:00
+#+draft: false
+
+[[/images/infra-panel.jpg]]
+
+September 17 2026 was Salt Flats Summit day. Salt Flats Summit is *the* fintech conference; it's right at the start of conference season, and we jokingly say that we intend to ruin every other conference for you by being a truly unique experience in the middle of the [[https://en.wikipedia.org/wiki/Bonneville_Salt_Flats][Boneville Salt Flats]], Utah. There were fast cars, helicopter joyrides, a live concert, photo boots, and a great atmosphere to network, strategize and learn.
+
+I hosted a panel with the topic "Winning with Infrastructure". I had a great conversation with the CTO of [[https://www.jackhenry.com/][Jack Henry]] Ben Metz, and the CEO of [[https://moov.io/][moov]] Wade Arnold. We go over topics such as the complexity of stitching together multiple systems, designing from first principles, where stablecoins fit, and (because it couldn't be left out) how AI changes the landscape of banking infrastructure.
+
+30 minutes is not nearly enough time, but it was a very interesting and lively conversation. The recording was taken by one of my peers in the audience (👋 JC) and shared with me afterwards. Apologies in advance for the video quality and recording angle.
+
+{{< youtube lbIKYAuCtEU >}}
+
+If you were in attendance: I hope to see you again next year!
