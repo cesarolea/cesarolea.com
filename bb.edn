@@ -1,0 +1,9 @@
+{:tasks
+ {deploy {:doc "Build and sync site to S3"
+          :task (shell "aws s3 sync public/ s3://www.cesarolea.com --exclude=media/* --exclude=.DS_Store --profile personal")}
+
+  invalidate {:doc "Invalidate CloudFront cache for HTML pages"
+              :task (shell "aws --profile personal cloudfront create-invalidation --distribution-id E1YYZ6VF7SOPHL --paths /index.html '/posts/*' '/about/*' '/rockofonia/*'")}
+
+  publish {:doc "Deploy and invalidate"
+           :depends [deploy invalidate]}}}
