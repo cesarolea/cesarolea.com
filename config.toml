@@ -4,7 +4,10 @@ title = "César Olea"
 theme = "hugo-ink"
 ## paginate = 5
 
-copyright = "© Copyright César Olea 2025"
+copyright = "© Copyright César Olea 2026"
+
+[security]
+  allowContent = ['! ^text/html$']
 
 pygmentsstyle = "emacs"
 pygmentscodefences = true
@@ -22,7 +25,7 @@ googleAnalytics = "UA-123-45"
       unsafe = true
 
 [params]
-	subtitle = "Software Developer | CTO of [LoanPro](https://loanpro.io)"
+	subtitle = "Software Developer | President of Technology & Product, CTO of [LoanPro](https://loanpro.io)"
 
 	# Optional 64x64 avatar image.
 #	avatar = "https://image.freepik.com/free-vector/young-man-head-with-beard-avatar-character_24877-36786.jpg"
