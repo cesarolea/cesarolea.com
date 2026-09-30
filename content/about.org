@@ -1,6 +1,6 @@
 #+HUGO_TYPE: page
 
-** Hi!
+* Hi!
 
 My name is César Olea. I'm a Software Developer living in Hermosillo,
 México. If you want to know what I'm working on, the best place is my
